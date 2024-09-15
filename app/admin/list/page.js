@@ -1,10 +1,10 @@
-import LogingPage from "@/Imports/auth/page/LogingPage";
+import ListPage from "@/Imports/list/page/ListPage";
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <LogingPage />
+      <ListPage />
     </div>
   );
 };

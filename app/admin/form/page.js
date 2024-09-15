@@ -1,10 +1,10 @@
-import LogingPage from "@/Imports/auth/page/LogingPage";
+import BillFormPage from "@/Imports/newBill/page/BillFormPage";
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <LogingPage />
+      <BillFormPage />
     </div>
   );
 };
