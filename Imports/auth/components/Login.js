@@ -1,74 +1,65 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import nookies, { setCookie } from "nookies";
+import nookies, { setCookie } from "nookies";
 import MainWrapper from "../../../components/helper/Container";
-// import { redirect, useRouter } from "next/navigation";
-// import { toast } from "react-toastify";
-// import { UseLogin } from "../api/UseLogin";
+import { redirect, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { UseLogin } from "../api/UseLogin";
 import { CloseEyeIcon, Eye } from "../assets";
-// import { roleRoutes } from "../../../lib/helper/helper";
 
 const Login = () => {
-  // const router = useRouter();
-  // const { token } = nookies.get({});
+  const router = useRouter();
+  const { token } = nookies.get({});
 
-  // useEffect(() => {
-  //   if (token) {
-  //     redirect("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (token) {
+      redirect("/admin");
+    }
+  }, []);
 
-  // const [userInfo, setUserInfo] = useState({
-  //   email: "",
-  //   password: "",
-  // });
-  // const [showPassword, setShowPassword] = useState(false);
-  // const [loading, setLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    password: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setUserInfo({ ...userInfo, [name]: value });
-  // };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
 
-  // const HandlerSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   setTimeout(async () => {
-  //     const response = await UseLogin(userInfo);
-  //     if (response !== undefined) {
-  //       setCookie(null, "role", response?.user?.role, {
-  //         maxAge: 30 * 24 * 60 * 60,
-  //         path: "/",
-  //       });
-  //       setCookie(null, "token", response?.token, {
-  //         maxAge: 30 * 24 * 60 * 60,
-  //         path: "/",
-  //       });
-  //       toast.success("Login Successfully", {
-  //         theme: "colored",
-  //         autoClose: 1000,
-  //       });
-  //       setLoading(false);
+  const HandlerSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(async () => {
+      const response = await UseLogin(userInfo);
+      if (response !== undefined) {
+        setCookie(null, "token", response?.token, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+        });
+        toast.success("Login Successfully", {
+          theme: "colored",
+          autoClose: 1000,
+        });
+        setLoading(false);
+        router.push("/admin");
+      } else {
+        toast.error("Invalid Password And Email", {
+          theme: "colored",
+          autoClose: 1000,
+        });
+        setLoading(false);
+      }
+    }, 500);
 
-  //       const route = roleRoutes[response?.user?.role];
-  //       if (route) {
-  //         router.push(route);
-  //       }
-  //     } else {
-  //       toast.error("Invalid Password And Email", {
-  //         theme: "colored",
-  //         autoClose: 1000,
-  //       });
-  //       setLoading(false);
-  //     }
-  //   }, 500);
-
-  //   setUserInfo({
-  //     email: "",
-  //     password: "",
-  //   });
-  // };
+    setUserInfo({
+      username: "",
+      password: "",
+    });
+  };
 
   return (
     <Container>
@@ -76,48 +67,42 @@ const Login = () => {
         <TitleDiv>
           <Heading>Login</Heading>
         </TitleDiv>
-        <Form
-        // onSubmit={HandlerSubmit}
-        >
+        <Form onSubmit={HandlerSubmit}>
           <InputWrapper>
-            <Label>Email</Label>
+            <Label>username</Label>
             <Input
-              // onChange={handleChange}
-              // value={userInfo.email}
-              name="email"
-              placeholder="Email"
-              type="email"
+              onChange={handleChange}
+              value={userInfo.email}
+              name="username"
+              placeholder="UserName"
+              type="text"
             />
           </InputWrapper>
           <InputWrapper>
             <Label>Password</Label>
             <InputPasswordWrapper>
               <InputPassword
-                // onChange={handleChange}
-                // value={userInfo.password}
-                // type={showPassword ? "text" : "password"}
+                onChange={handleChange}
+                value={userInfo.password}
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
               />
-              <IconWrapper
-              // onClick={() => setShowPassword(!showPassword)}
-              >
-                {/* {showPassword ? <CloseEyeIcon /> : <Eye />} */}
-                <Eye />
+              <IconWrapper onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <CloseEyeIcon /> : <Eye />}
               </IconWrapper>
             </InputPasswordWrapper>
           </InputWrapper>
           <InputWrapper>
             <SubmitBtn>
               <Button type="submit">
-                {/* {loading ? (
+                {loading ? (
                   <div className=" justify-center items-center inline-flex">
                     <div className="loader border-t-4 border-white rounded-full w-4 h-4 animate-spin"></div>
                   </div>
                 ) : (
                   "Login"
-                )} */}
-                Login
+                )}
               </Button>
             </SubmitBtn>
           </InputWrapper>

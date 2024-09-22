@@ -62,7 +62,7 @@ const Aside = ({ show, logOut }) => {
               <span className="ms-3">Bill List</span>
             </a>
           </li>
-          <li
+          {/* <li
             onClick={() => router.push("/admin/list/new11")}
             className="cursor-pointer hover:scale-105 transition-all duration-200"
           >
@@ -77,7 +77,7 @@ const Aside = ({ show, logOut }) => {
               <PackageIcon />
               <span className="ms-3">Recent Bill</span>
             </a>
-          </li>{" "}
+          </li>{" "} */}
           <li
             onClick={() => router.push("/admin/form")}
             className="cursor-pointer hover:scale-105 transition-all duration-200"

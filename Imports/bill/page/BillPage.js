@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import UserTableWrapper from "../components/UserTableWrapper";
+import BillWrapper from "../components/BillWrapper";
 
 function BillPage() {
   return (
     <div>
-      <UserTableWrapper />
+      <BillWrapper />
     </div>
   );
 }

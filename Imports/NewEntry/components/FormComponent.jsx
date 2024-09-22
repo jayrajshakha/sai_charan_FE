@@ -1,20 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import UseAddBill from "../api/UseAddBill";
+import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import nookies from "nookies";
-import { toast } from "react-toastify";
+import UseAddBill from "@/Imports/newBill/api/UseAddBill";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
-const BillForm = () => {
+const FormComponent = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    address: "",
+    id: uuidv4(),
     date: "",
-    gstin: "",
-    billNo: "",
-    city: "",
-    stateCode: "",
+    vahicle_no: "",
+    tone: "",
+    place: "",
+    per_rate: "",
+    ammount: "",
   });
 
   const { token } = nookies.get({});
@@ -22,18 +23,21 @@ const BillForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const addBill = async (data) => {
-    const response = await UseAddBill(token, data);
+  const addEntry = async (data) => {
+    const response = await UseAddBill(token, data, "66efe8f50b64f8ba0bd80a5e");
     if (response) {
       toast.success(
         "New Bill added successfully",
         { theme: "colored" },
         { autoClose: 1000 }
       );
-      return router.push("/admin/list");
+      return router.back();
     } else {
       toast.error("Failed to add new bill", {
         theme: "colored",
@@ -44,64 +48,51 @@ const BillForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form data submitted:", formData);
-
-    const newBill = {
-      bill_no: "00001",
-      name: formData?.name,
-      address: formData.address,
-      date: formData.date,
-      city: formData.city,
-      state_code: formData.stateCode,
-      GSTIN: formData.gstin,
-      total_ammount: 0,
-      bill_entry: [],
-    };
-
-    addBill(newBill);
+    addEntry(formData);
+    setFormData({
+      id: uuidv4(),
+      date: "",
+      vahicle_no: "",
+      tone: "",
+      place: "",
+      per_rate: "",
+      ammount: "",
+    });
   };
 
   return (
     <div className=" mx-auto p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold text-center mb-4">Bill Header Form</h2>
       <form
         onSubmit={handleSubmit}
         className=" flex items-center justify-start flex-col space-y-4"
       >
-        <div className="w-[80%]">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-            required
-          />
-        </div>
-        <div className="w-[80%]">
-          <label
-            htmlFor="address"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Address
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-            required
-          />
+        <div className="w-[80%] flex gap-x-6">
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700">
+              Vahicle No.
+            </label>
+            <input
+              type="text"
+              name="vahicle_no"
+              value={formData.vahicle_no}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
+          <div className="w-full">
+            <label className="block text-sm font-medium text-gray-700">
+              place
+            </label>
+            <input
+              type="text"
+              name="place"
+              value={formData.place}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+              required
+            />
+          </div>
         </div>
         <div className="w-[80%] flex gap-x-6">
           <div className="w-full">
@@ -126,13 +117,12 @@ const BillForm = () => {
               htmlFor="gstin"
               className="block text-sm font-medium text-gray-700"
             >
-              GSTIN
+              tone
             </label>
             <input
               type="text"
-              id="gstin"
-              name="gstin"
-              value={formData.gstin}
+              name="tone"
+              value={formData.tone}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
@@ -145,13 +135,12 @@ const BillForm = () => {
               htmlFor="billNo"
               className="block text-sm font-medium text-gray-700"
             >
-              Bill No
+              per_rate
             </label>
             <input
-              type="text"
-              id="billNo"
-              name="billNo"
-              value={formData.billNo}
+              type="number"
+              name="per_rate"
+              value={formData.per_rate}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
@@ -162,32 +151,12 @@ const BillForm = () => {
               htmlFor="city"
               className="block text-sm font-medium text-gray-700"
             >
-              City
+              ammount
             </label>
             <input
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex w-[80%] gap-x-6">
-          <div className="w-full">
-            <label
-              htmlFor="stateCode"
-              className="block text-sm font-medium text-gray-700"
-            >
-              State Code
-            </label>
-            <input
-              type="text"
-              id="stateCode"
-              name="stateCode"
-              value={formData.stateCode}
+              type="number"
+              name="ammount"
+              value={formData.ammount}
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
@@ -208,4 +177,4 @@ const BillForm = () => {
   );
 };
 
-export default BillForm;
+export default FormComponent;

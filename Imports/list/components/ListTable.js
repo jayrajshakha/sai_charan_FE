@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { DeletBox, UpdateBox, UserNotFound } from "../helper";
 import { DeleteIcon, EditIcon } from "../assets";
 import { useRouter } from "next/navigation";
+import useGetAllBills from "../api/useGetAllBills";
 // import { UseGetSearchUserByName, UseGetUserData } from "../api";
 // import { useDeletUser, useUpdateUser } from "../api/useSuperApi";
 // import { UseSearchBooking } from "../../Package/api";
@@ -14,7 +15,7 @@ import { useRouter } from "next/navigation";
 // import PlusIcon from "../../Package/Assets/PlusIcon";
 
 const ListTable = () => {
-  const [user, setUser] = useState([]);
+  const [bill, setBill] = useState([]);
   const [page, setPage] = useState(1);
   const [offset, setOffset] = useState(0);
   const [totalPages, setTotalPages] = useState(null);
@@ -30,22 +31,19 @@ const ListTable = () => {
 
   const router = useRouter();
 
-  // const fetchUserData = async () => {
-  //   const response = await UseGetUserData(UserData?.role, page, 10, token);
-  //   setOffset(response?.offset);
-  //   setUser(response?.users);
-  //   setTotalPages(response?.totalPages);
-  //   setIsLoading(false);
-  //   setEditBox(false);
-  // };
+  const fetchUserData = async () => {
+    const response = await useGetAllBills(token);
+    // setOffset(response?.offset);
+    // setUser(response?.users);
+    // setTotalPages(response?.totalPages);
+    // setIsLoading(false);
+    // setEditBox(false);
+    setBill(response?.bills);
+  };
 
-  // useEffect(() => {
-  //   if (search === "") {
-  //     setTimeout(() => {
-  //       UserData !== null && fetchUserData();
-  //     }, 200);
-  //   }
-  // }, [UserData, page, search]);
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   const HandlerEdit = (id) => {
     OpenEditBox(true);
@@ -110,39 +108,44 @@ const ListTable = () => {
           </thead>
 
           <tbody>
-            {[...Array(6)]?.map((item, index) => {
-              return (
-                <tr
-                  onClick={() => router.push("/admin/list/new1")}
-                  key={index}
-                  className="bg-white  border-b  userTable:table-row  dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                >
-                  <td className="w-4 p-4 text-center ">{offset + index + 1}</td>
-                  <td className="px-6 py-4 text-center  ">00786</td>
-                  <th
-                    scope="row"
-                    className="px-6 py-4 text-center  font-medium text-gray-900 whitespace-nowrap "
+            {bill?.length > 0 &&
+              bill?.map((item, index) => {
+                return (
+                  <tr
+                    onClick={() => router.push(`/admin/list/${item?._id}`)}
+                    key={index}
+                    className="bg-white  border-b cursor-pointer  userTable:table-row  dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                   >
-                    Jovial Group Of Company
-                  </th>
-                  <td className="px-6 py-4 text-center ">JDSHG90809SF</td>{" "}
-                  <td className="px-6 py-4 text-center ">4500096</td>{" "}
-                  <td className="px-6 py-4">
-                    <div className="font-medium flex gap-1 hover:underline">
-                      <Span onClick={() => HandlerEdit(item._id)}>
-                        <EditIcon />
-                      </Span>
-                      <Span
-                        className="hover:text-red-300"
-                        onClick={() => OpenPopUpBox(item._id)}
-                      >
-                        <DeleteIcon />
-                      </Span>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                    <td className="w-4 p-4 text-center ">
+                      {offset + index + 1}
+                    </td>
+                    <td className="px-6 py-4 text-center  ">{item?.bill_no}</td>
+                    <th
+                      scope="row"
+                      className="px-6 py-4 text-center  font-medium text-gray-900 whitespace-nowrap "
+                    >
+                      {item?.name}
+                    </th>
+                    <td className="px-6 py-4 text-center ">{item?.GSTIN}</td>{" "}
+                    <td className="px-6 py-4 text-center ">
+                      {item?.total_ammount}
+                    </td>{" "}
+                    <td className="px-6 py-4">
+                      <div className="font-medium flex gap-1 hover:underline">
+                        <Span onClick={() => HandlerEdit(item._id)}>
+                          <EditIcon />
+                        </Span>
+                        <Span
+                          className="hover:text-red-300"
+                          onClick={() => OpenPopUpBox(item._id)}
+                        >
+                          <DeleteIcon />
+                        </Span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
           {/* Mobile View */}
 

@@ -6,14 +6,17 @@ import { toast } from "react-toastify";
 // import { useSelector } from "react-redux";
 import { DeletBox, UpdateBox, UserNotFound } from "../helper";
 import { DeleteIcon, EditIcon } from "../assets";
+import { useParams } from "next/navigation";
+import useGetOneBill from "../api/useGetOneBill";
+import { BillStore } from "@/data/BillStore";
 // import { UseGetSearchUserByName, UseGetUserData } from "../api";
 // import { useDeletUser, useUpdateUser } from "../api/useSuperApi";
 // import { UseSearchBooking } from "../../Package/api";
 // import SearchBox from "../../../components/helper/SearchBox";
 // import PlusIcon from "../../Package/Assets/PlusIcon";
 
-const UserTable = () => {
-  const [user, setUser] = useState([]);
+const Bill = () => {
+  // const [bill, setBill] = useState([]);
   const [page, setPage] = useState(1);
   const [offset, setOffset] = useState(0);
   const [totalPages, setTotalPages] = useState(null);
@@ -25,24 +28,24 @@ const UserTable = () => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
+  const { listID } = useParams();
+  const { setBill: SetBill, bill } = BillStore();
+  console.log("bill_id", listID);
+
   // const UserData = useSelector((state) => state.UserData.value);
 
-  // const fetchUserData = async () => {
-  //   const response = await UseGetUserData(UserData?.role, page, 10, token);
-  //   setOffset(response?.offset);
-  //   setUser(response?.users);
-  //   setTotalPages(response?.totalPages);
-  //   setIsLoading(false);
-  //   setEditBox(false);
-  // };
+  const fetchBillData = async () => {
+    const response = await useGetOneBill(listID, token);
+    console.log("response", response);
+    // setBill(response[0]);
+    SetBill(response[0]);
 
-  // useEffect(() => {
-  //   if (search === "") {
-  //     setTimeout(() => {
-  //       UserData !== null && fetchUserData();
-  //     }, 200);
-  //   }
-  // }, [UserData, page, search]);
+    setEditBox(false);
+  };
+
+  useEffect(() => {
+    fetchBillData();
+  }, []);
 
   const HandlerEdit = (id) => {
     OpenEditBox(true);
@@ -113,41 +116,43 @@ const UserTable = () => {
           </thead>
 
           <tbody>
-            {[...Array(6)]?.map((item, index) => {
-              return (
-                <tr
-                  key={index}
-                  className="bg-white border-b  userTable:table-row  dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                >
-                  <td className="w-4 p-4">{offset + index + 1}</td>
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            {bill?.bill_entry?.length > 0 &&
+              bill?.bill_entry?.map((item, index) => {
+                return (
+                  <tr
+                    key={index}
+                    className="bg-white border-b  userTable:table-row  dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                   >
-                    20-11-2001
-                  </td>
-                  <td className="px-6 py-4">{"GJ 25 A 7822"}</td>
-                  <td className="px-6 py-4">{"Gujrat"}</td>
-                  <td className="px-6 py-4">{"7822"}</td>
-                  <td className="px-6 py-4">{"822"}</td>
-                  <td className="px-6 py-4">{"24300"}</td>
-                  <td className="px-6 py-4">
-                    <div className="font-medium flex gap-1 hover:underline">
-                      <Span onClick={() => HandlerEdit(item._id)}>
-                        <EditIcon />
-                      </Span>
-                      <Span
-                        className="hover:text-red-300"
-                        onClick={() => OpenPopUpBox(item._id)}
-                      >
-                        <DeleteIcon />
-                      </Span>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                    <td className="w-4 p-4">{index + 1}</td>
+                    <td
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {item?.date}
+                    </td>
+                    <td className="px-6 py-4">{item?.vahicle_no}</td>
+                    <td className="px-6 py-4">{item?.place}</td>
+                    <td className="px-6 py-4">{item?.tone}</td>
+                    <td className="px-6 py-4">{item?.per_rate}</td>
+                    <td className="px-6 py-4">{item?.ammount}</td>
+                    <td className="px-6 py-4">
+                      <div className="font-medium flex gap-1 hover:underline">
+                        <Span onClick={() => HandlerEdit(item.id)}>
+                          <EditIcon />
+                        </Span>
+                        <Span
+                          className="hover:text-red-300"
+                          onClick={() => OpenPopUpBox(item.id)}
+                        >
+                          <DeleteIcon />
+                        </Span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
+
           {/* Mobile View */}
           {/* <tbody className="flex flex-col userTable:hidden gap-3">
             {[...Array(5)]?.map((item, index) => {
@@ -209,6 +214,10 @@ const UserTable = () => {
         </table>
       </div>
 
+      {bill?.bill_entry?.length === 0 && (
+        <div>No Bill Entry Pleas Add New Entries</div>
+      )}
+
       {openDeletBox && <DeletBox HandlerDelet={HandlerDelet} />}
 
       {editBox && (
@@ -222,7 +231,7 @@ const UserTable = () => {
   );
 };
 
-export default UserTable;
+export default Bill;
 
 const Container = styled.div`
   width: 100%;
