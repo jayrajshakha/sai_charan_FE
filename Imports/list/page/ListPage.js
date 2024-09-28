@@ -4,11 +4,7 @@ import React from "react";
 import ListTableWrapper from "../components/ListTableWrapper";
 
 const ListPage = () => {
-  return (
-    <div>
-      <ListTableWrapper />
-    </div>
-  );
+  return <ListTableWrapper />;
 };
 
 export default ListPage;

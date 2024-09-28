@@ -4,11 +4,7 @@ import React from "react";
 import BillWrapper from "../components/BillWrapper";
 
 function BillPage() {
-  return (
-    <div>
-      <BillWrapper />
-    </div>
-  );
+  return <BillWrapper />;
 }
 
 export default BillPage;

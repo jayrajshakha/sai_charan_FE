@@ -6,6 +6,7 @@ import nookies from "nookies";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import UseAddEntry from "../api/UseAddEntry";
+import styled from "styled-components";
 
 const FormComponent = () => {
   const [formData, setFormData] = useState({
@@ -32,11 +33,10 @@ const FormComponent = () => {
   const addEntry = async (data) => {
     const response = await UseAddEntry(token, data, "66efe8f50b64f8ba0bd80a5e");
     if (response) {
-      toast.success(
-        "New Bill added successfully",
-        { theme: "colored" },
-        { autoClose: 1000 }
-      );
+      toast.success("New Bill added successfully", {
+        theme: "colored",
+        autoClose: 1000,
+      });
       return router.back();
     } else {
       toast.error("Failed to add new bill", {
@@ -61,120 +61,152 @@ const FormComponent = () => {
   };
 
   return (
-    <div className=" mx-auto p-4 bg-white shadow-md rounded-lg">
-      <form
-        onSubmit={handleSubmit}
-        className=" flex items-center justify-start flex-col space-y-4"
-      >
-        <div className="w-[80%] flex gap-x-6">
-          <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700">
-              Vahicle No.
-            </label>
-            <input
+    <Container>
+      <Form onSubmit={handleSubmit}>
+        <FormGroup>
+          <FormField>
+            <Label>Vahicle No.</Label>
+            <Input
               type="text"
               name="vahicle_no"
               value={formData.vahicle_no}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
-          </div>
-          <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700">
-              place
-            </label>
-            <input
+          </FormField>
+          <FormField>
+            <Label>Place</Label>
+            <Input
               type="text"
               name="place"
               value={formData.place}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
-          </div>
-        </div>
-        <div className="w-[80%] flex gap-x-6">
-          <div className="w-full">
-            <label
-              htmlFor="date"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Date
-            </label>
-            <input
+          </FormField>
+        </FormGroup>
+        <FormGroup>
+          <FormField>
+            <Label>Date</Label>
+            <Input
               type="date"
-              id="date"
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
-          </div>
-          <div className="w-full">
-            <label
-              htmlFor="gstin"
-              className="block text-sm font-medium text-gray-700"
-            >
-              tone
-            </label>
-            <input
+          </FormField>
+          <FormField>
+            <Label>Tone</Label>
+            <Input
               type="text"
               name="tone"
               value={formData.tone}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
-          </div>
-        </div>
-        <div className="w-[80%] flex gap-x-6">
-          <div className="w-full">
-            <label
-              htmlFor="billNo"
-              className="block text-sm font-medium text-gray-700"
-            >
-              per_rate
-            </label>
-            <input
+          </FormField>
+        </FormGroup>
+        <FormGroup>
+          <FormField>
+            <Label>Per Rate</Label>
+            <Input
               type="number"
               name="per_rate"
               value={formData.per_rate}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
-          </div>
-          <div className="w-full">
-            <label
-              htmlFor="city"
-              className="block text-sm font-medium text-gray-700"
-            >
-              ammount
-            </label>
-            <input
+          </FormField>
+          <FormField>
+            <Label>Ammount</Label>
+            <Input
               type="number"
               name="ammount"
               value={formData.ammount}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
-          </div>
-        </div>
-
-        <div className="w-[80%] flex justify-start items-center ">
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+          </FormField>
+        </FormGroup>
+        <ButtonContainer>
+          <SubmitButton type="submit">Submit</SubmitButton>
+        </ButtonContainer>
+      </Form>
+    </Container>
   );
 };
 
 export default FormComponent;
+
+// Styled Components
+const Container = styled.div`
+  max-width: 600px; // Limit max width for better layout
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+`;
+
+const FormField = styled.div`
+  flex: 1; // Take equal space
+  min-width: 220px; // Minimum width for smaller screens
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #4b5563; // text-gray-700
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db; // border-gray-300
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+
+  &:focus {
+    outline: none;
+    border-color: #2563eb; // border-blue-600
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5); // focus ring
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const SubmitButton = styled.button`
+  padding: 12px 24px;
+  background-color: #2563eb; // bg-blue-600
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #1e40af; // hover:bg-blue-700
+  }
+`;

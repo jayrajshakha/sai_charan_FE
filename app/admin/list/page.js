@@ -2,11 +2,7 @@ import ListPage from "@/Imports/list/page/ListPage";
 import React from "react";
 
 const page = () => {
-  return (
-    <div>
-      <ListPage />
-    </div>
-  );
+  return <ListPage />;
 };
 
 export default page;

@@ -1,43 +1,26 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import nookies from "nookies";
-import { toast } from "react-toastify";
-// import { useSelector } from "react-redux";
-import { DeletBox, UpdateBox, UserNotFound } from "../helper";
-import { DeleteIcon, EditIcon } from "../assets";
-import { useParams } from "next/navigation";
-import useGetOneBill from "../api/useGetOneBill";
 import { BillStore } from "@/data/BillStore";
-// import { UseGetSearchUserByName, UseGetUserData } from "../api";
-// import { useDeletUser, useUpdateUser } from "../api/useSuperApi";
-// import { UseSearchBooking } from "../../Package/api";
-// import SearchBox from "../../../components/helper/SearchBox";
-// import PlusIcon from "../../Package/Assets/PlusIcon";
+import { useParams } from "next/navigation";
+import nookies from "nookies";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import useGetOneBill from "../api/useGetOneBill";
+import { DeleteIcon, EditIcon } from "../assets";
+import { DeletBox, UpdateBox } from "../helper";
 
 const Bill = () => {
-  const [page, setPage] = useState(1);
-  const [offset, setOffset] = useState(0);
-  const [totalPages, setTotalPages] = useState(null);
-  const [openDeletBox, setopenDeletBox] = useState(false);
-  const [id, setId] = useState(null);
+  const [openDeletBox, setOpenDeletBox] = useState(false);
   const [editBox, setEditBox] = useState(false);
   const [editableUser, setEditableUser] = useState(null);
   const { token } = nookies.get({});
-  const [search, setSearch] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
 
   const { listID } = useParams();
   const { setBill: SetBill, bill } = BillStore();
 
-  // const UserData = useSelector((state) => state.UserData.value);
-
   const fetchBillData = async () => {
     const response = await useGetOneBill(listID, token);
     console.log("response", response);
-    // setBill(response[0]);
     SetBill(response[0]);
-
     setEditBox(false);
   };
 
@@ -45,175 +28,68 @@ const Bill = () => {
     fetchBillData();
   }, []);
 
-  const HandlerEdit = (id) => {
-    OpenEditBox(true);
-    // setEditableUser(user.filter((user) => user._id === id)[0]);
+  const handlerEdit = (id) => {
+    openEditBox(true);
   };
 
-  const OpenEditBox = (state) => {
+  const openEditBox = (state) => {
     setEditBox(state);
   };
 
   const updatedUserData = (data) => {
-    // const fetchUpdate = async () => {
-    //   const response = await useUpdateUser(data._id, data, token);
-    //   if (response) {
-    //     toast.success("Successfully update  userData", {
-    //       theme: "colored",
-    //       autoClose: 1000,
-    //     });
-    //   }
-    // };
-    // fetchUpdate();
-
-    // const replaceableIndex = user.findIndex((item) => item._id === data._id);
-    // user[replaceableIndex] = data;
     setEditBox(false);
   };
 
-  const OpenPopUpBox = (id) => {
+  const openPopUpBox = (id) => {
     setId(id);
-    setopenDeletBox(true);
+    setOpenDeletBox(true);
   };
 
   return (
     <Container>
-      <div className=" userTable:shadow-md sm:rounded-lg w-full">
-        {/* <div className="flex justify-center items-center h-32">
-          <div className="loader border-t-4 border-blue-500 rounded-full w-12 h-12 animate-spin"></div>
-        </div> */}
-
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr className=" hidden userTable:contents">
-              <th scope="col" className="p-4">
-                Sr.
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Date
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Vahicle No
-              </th>
-              <th scope="col" className=" px-6 py-3">
-                Place
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Weight
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Per Rate
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Ammount
-              </th>{" "}
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
-            </tr>
+      <TableContainer>
+        <Table>
+          <thead>
+            <TableRow>
+              <TableHeader>Sr.</TableHeader>
+              <TableHeader>Date</TableHeader>
+              <TableHeader>Vahicle No</TableHeader>
+              <TableHeader>Place</TableHeader>
+              <TableHeader>Weight</TableHeader>
+              <TableHeader>Per Rate</TableHeader>
+              <TableHeader>Ammount</TableHeader>
+              <TableHeader>Action</TableHeader>
+            </TableRow>
           </thead>
-
           <tbody>
             {bill?.bill_entry?.length > 0 &&
-              bill?.bill_entry?.map((item, index) => {
-                return (
-                  <tr
-                    key={index}
-                    className="bg-white border-b  userTable:table-row  dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                  >
-                    <td className="w-4 p-4">{index + 1}</td>
-                    <td
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {item?.date}
-                    </td>
-                    <td className="px-6 py-4">{item?.vahicle_no}</td>
-                    <td className="px-6 py-4">{item?.place}</td>
-                    <td className="px-6 py-4">{item?.tone}</td>
-                    <td className="px-6 py-4">{item?.per_rate}</td>
-                    <td className="px-6 py-4">{item?.ammount}</td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium flex gap-1 hover:underline">
-                        <Span onClick={() => HandlerEdit(item.id)}>
-                          <EditIcon />
-                        </Span>
-                        <Span
-                          className="hover:text-red-300"
-                          onClick={() => OpenPopUpBox(item.id)}
-                        >
-                          <DeleteIcon />
-                        </Span>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-
-          {/* Mobile View */}
-          {/* <tbody className="flex flex-col userTable:hidden gap-3">
-            {[...Array(5)]?.map((item, index) => {
-              return (
-                <tr
-                  key={index}
-                  className="bg-white border-b rounded-xl  gap-3  dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                >
-                  <div className="px-6 py-[6px]  gap-3 text-center flex   font-medium text-gray-900 dark:text-white">
-                    <div className="uppercase font-bold">Count :</div>
-                    <div>{offset + index + 1}</div>
-                  </div>
-                  <div className="px-6 py-[6px]   text-center flex  gap-3 font-medium text-gray-900 dark:text-white">
-                    <div className="uppercase font-bold">Date :</div>
-                    <div> {20 - 11 - 2001}</div>
-                  </div>
-                  <div className="px-6 py-[6px]   text-center flex  gap-3 font-medium text-gray-900 dark:text-white">
-                    <div className="uppercase font-bold">Vahicle No :</div>
-                    <div> {"GJ 25 A 7822"}</div>
-                  </div>
-
-                  <div className="px-6 py-[6px]   text-center flex  gap-3 font-medium text-gray-900 dark:text-white">
-                    <div className="uppercase font-bold">Place :</div>
-                    <div> Gujrat</div>
-                  </div>
-
-                  <div className="px-6 py-[6px]   text-center flex  gap-3 font-medium text-gray-900 dark:text-white">
-                    <div className="uppercase font-bold">Weight :</div>
-                    <div> 300 Tone</div>
-                  </div>
-
-                  <div className="px-6 py-[6px]   text-center flex  gap-3 font-medium text-gray-900 dark:text-white">
-                    <div className="uppercase font-bold">Rate :</div>
-                    <div> 2200</div>
-                  </div>
-                  <div className="px-6 py-[6px]   text-center flex  gap-3 font-medium text-gray-900 dark:text-white">
-                    <div className="uppercase font-bold">Ammount :</div>
-                    <div> 78000</div>
-                  </div>
-
-                  <div className="px-6 py-[6px]   text-center flex  gap-3 font-medium text-gray-900 dark:text-white">
-                    <div className="uppercase font-bold">Action :</div>
-                    <div className="font-medium flex gap-1 hover:underline">
-                      <Span onClick={() => HandlerEdit(item._id)}>
+              bill?.bill_entry?.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item?.date}</TableCell>
+                  <TableCell>{item?.vahicle_no}</TableCell>
+                  <TableCell>{item?.place}</TableCell>
+                  <TableCell>{item?.tone}</TableCell>
+                  <TableCell>{item?.per_rate}</TableCell>
+                  <TableCell>{item?.ammount}</TableCell>
+                  <TableCell>
+                    <ActionContainer>
+                      <ActionSpan onClick={() => handlerEdit(item.id)}>
                         <EditIcon />
-                      </Span>
-                      <Span
-                        className="hover:text-red-300"
-                        onClick={() => OpenPopUpBox(item._id)}
-                      >
+                      </ActionSpan>
+                      <ActionSpan onClick={() => openPopUpBox(item.id)}>
                         <DeleteIcon />
-                      </Span>
-                    </div>
-                  </div>
-                </tr>
-              );
-            })}
-          </tbody> */}
-        </table>
-      </div>
+                      </ActionSpan>
+                    </ActionContainer>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </tbody>
+        </Table>
+      </TableContainer>
 
       {bill?.bill_entry?.length === 0 && (
-        <div>No Bill Entry Pleas Add New Entries</div>
+        <NoBillMessage>No Bill Entry, Please Add New Entries</NoBillMessage>
       )}
 
       {openDeletBox && <DeletBox HandlerDelet={HandlerDelet} />}
@@ -222,7 +98,7 @@ const Bill = () => {
         <UpdateBox
           updatedUserData={updatedUserData}
           editableUser={editableUser}
-          OpenEditBox={OpenEditBox}
+          openEditBox={openEditBox}
         />
       )}
     </Container>
@@ -231,23 +107,82 @@ const Bill = () => {
 
 export default Bill;
 
+// Styled Components
 const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
 `;
 
-const Span = styled.span`
+const TableContainer = styled.div`
+  width: 100%;
+  overflow-x: auto; // Enables horizontal scrolling for smaller screens
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  color: #6b7280; /* text-gray-500 */
+  @media (max-width: 768px) {
+    font-size: 0.875rem; /* Smaller font-size for smaller screens */
+  }
+`;
+
+const TableHeader = styled.th`
+  padding: 12px;
+  text-align: center;
+  background-color: #f9fafb; /* bg-gray-50 */
+  color: #374151; /* text-gray-900 */
+  text-transform: uppercase;
+  font-size: 0.875rem; /* text-sm */
+`;
+
+const TableRow = styled.tr`
+  background-color: white; /* bg-white */
+  transition: background-color 0.2s;
   cursor: pointer;
+
+  &:hover {
+    background-color: #f1f5f9; /* hover:bg-gray-50 */
+  }
+`;
+
+const TableCell = styled.td`
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+`;
+
+const ActionContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+`;
+
+const ActionSpan = styled.span`
+  cursor: pointer;
+  transition: opacity 0.2s;
+
   &:hover {
     opacity: 0.7;
   }
 
   svg {
+    transition: transform 0.2s;
+
     &:hover {
-      scale: 1.1;
+      transform: scale(1.1);
     }
   }
+`;
+
+const NoBillMessage = styled.div`
+  margin-top: 20px;
+  color: #ef4444; /* text-red-600 */
+  font-size: 1rem;
+  text-align: center;
 `;
