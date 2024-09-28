@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import nookies from "nookies";
-import UseAddBill from "@/Imports/newBill/api/UseAddBill";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import UseAddEntry from "../api/UseAddEntry";
 
 const FormComponent = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ const FormComponent = () => {
   };
 
   const addEntry = async (data) => {
-    const response = await UseAddBill(token, data, "66efe8f50b64f8ba0bd80a5e");
+    const response = await UseAddEntry(token, data, "66efe8f50b64f8ba0bd80a5e");
     if (response) {
       toast.success(
         "New Bill added successfully",

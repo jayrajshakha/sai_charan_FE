@@ -1,8 +1,8 @@
 const base_url = process.env.NEXT_PUBLIC_BASE_API_URL;
 
-const UseAddBill = async (token, data, id) => {
+const UseAddBill = async (token, data) => {
   const fetchOptions = {
-    method: "PATCH",
+    method: "POST",
     headers: {
       Authorization: token,
       Accept: "application/json",
@@ -12,10 +12,7 @@ const UseAddBill = async (token, data, id) => {
   };
 
   try {
-    const response = await fetch(
-      `${base_url}/admin/newEntry/${id}`,
-      fetchOptions
-    );
+    const response = await fetch(`${base_url}/admin/newBill`, fetchOptions);
 
     if (!response.ok) {
       return response.statusText;

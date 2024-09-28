@@ -2,7 +2,7 @@ const base_url = process.env.NEXT_PUBLIC_BASE_API_URL;
 
 const UseAddEntry = async (token, data, id) => {
   const fetchOptions = {
-    method: "POST",
+    method: "PATCH",
     headers: {
       Authorization: token,
       Accept: "application/json",

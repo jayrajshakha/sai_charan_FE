@@ -1,49 +1,103 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import styled from "styled-components";
+
+const Container = styled.div`
+  height: 100%;
+  padding: 0.5rem; /* 2 */
+`;
+
+const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem; /* py-4 px-6 */
+  background-color: white;
+  border-radius: 0.375rem; /* rounded-md */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+`;
+
+const Title = styled.h1`
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700; /* font-bold */
+  color: #2d3748; /* text-gray-800 */
+`;
+
+const Main = styled.main`
+  margin-top: 1.5rem; /* mt-6 */
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem; /* gap-6 */
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr); /* lg:grid-cols-3 */
+  }
+`;
+
+const Section = styled.section`
+  padding: 1rem; /* p-4 */
+  background-color: white;
+  border-radius: 0.375rem; /* rounded-md */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05); /* hover:scale-110 */
+  }
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 600; /* font-semibold */
+  color: #2d3748; /* text-gray-800 */
+`;
+
+const SectionText = styled.p`
+  margin-top: 0.5rem; /* mt-2 */
+  color: #4a5568; /* text-gray-600 */
+`;
 
 const Dashsboard = () => {
   const router = useRouter();
 
   return (
-    <div className={`h-full p-2`}>
-      <header className="flex justify-between items-center py-4 px-6 bg-white rounded-md shadow-md">
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-      </header>
-      <main className="  mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <section
-          onClick={() => router.push("/admin/bills")}
-          className="p-4 bg-white rounded-md shadow-md cursor-pointer hover:scale-110 transition-all duration-200"
-        >
-          <h2 className="text-2xl font-semibold text-gray-800">Bills Data</h2>
-          <p className="mt-2 text-gray-600">Some Bills Data content...</p>
-        </section>
+    <Container>
+      <Header>
+        <Title>Dashboard</Title>
+      </Header>
+      <Main>
+        <Section onClick={() => router.push("/admin/bills")}>
+          <SectionTitle>Bills Data</SectionTitle>
+          <SectionText>Some Bills Data content...</SectionText>
+        </Section>
 
-        <section
-          className="p-4 bg-white rounded-md shadow-md cursor-pointer hover:scale-110 transition-all duration-200"
-          onClick={() => router.push("/admin/form")}
-        >
-          <h2 className="text-2xl font-semibold text-gray-800">Form</h2>
-          <p className="mt-2 text-gray-600">Some Form content...</p>
-        </section>
+        <Section onClick={() => router.push("/admin/form")}>
+          <SectionTitle>Form</SectionTitle>
+          <SectionText>Some Form content...</SectionText>
+        </Section>
 
-        <section className="p-4 bg-white rounded-md shadow-md cursor-pointer hover:scale-110 transition-all duration-200">
-          <h2 className="text-2xl font-semibold text-gray-800">Records</h2>
-          <p className="mt-2 text-gray-600">Some Records content...</p>
-        </section>
+        <Section>
+          <SectionTitle>Records</SectionTitle>
+          <SectionText>Some Records content...</SectionText>
+        </Section>
 
-        <section className="p-4 bg-white rounded-md shadow-md cursor-pointer hover:scale-110 transition-all duration-200">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            User Activity
-          </h2>
-          <p className="mt-2 text-gray-600">Some user activity content...</p>
-        </section>
-        <section className="p-4 bg-white rounded-md shadow-md cursor-pointer hover:scale-110 transition-all duration-200">
-          <h2 className="text-2xl font-semibold text-gray-800">Settings</h2>
-          <p className="mt-2 text-gray-600">Some settings content...</p>
-        </section>
-      </main>
-    </div>
+        <Section>
+          <SectionTitle>User Activity</SectionTitle>
+          <SectionText>Some user activity content...</SectionText>
+        </Section>
+
+        <Section>
+          <SectionTitle>Settings</SectionTitle>
+          <SectionText>Some settings content...</SectionText>
+        </Section>
+      </Main>
+    </Container>
   );
 };
 

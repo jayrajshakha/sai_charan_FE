@@ -5,6 +5,66 @@ import UseAddBill from "../api/UseAddBill";
 import nookies from "nookies";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import styled from "styled-components";
+
+const Container = styled.div`
+  margin: auto;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+`;
+
+const Title = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-size: 0.875rem;
+  font-weight: medium;
+  color: #4a5568; /* gray-700 */
+`;
+
+const Input = styled.input`
+  margin-top: 0.25rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.375rem; /* rounded-md */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: #2563eb; /* blue-600 */
+  color: white;
+  font-weight: 600; /* font-semibold */
+  border-radius: 0.375rem; /* rounded-md */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #1d4ed8; /* blue-700 */
+  }
+`;
+
+const FlexRow = styled.div`
+  display: flex;
+  gap: 1.5rem;
+  width: 80%;
+`;
 
 const BillForm = () => {
   const [formData, setFormData] = useState({
@@ -28,11 +88,10 @@ const BillForm = () => {
   const addBill = async (data) => {
     const response = await UseAddBill(token, data);
     if (response) {
-      toast.success(
-        "New Bill added successfully",
-        { theme: "colored" },
-        { autoClose: 1000 }
-      );
+      toast.success("New Bill added successfully", {
+        theme: "colored",
+        autoClose: 1000,
+      });
       return router.push("/admin/list");
     } else {
       toast.error("Failed to add new bill", {
@@ -44,7 +103,6 @@ const BillForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
     console.log("Form data submitted:", formData);
 
     const newBill = {
@@ -63,148 +121,98 @@ const BillForm = () => {
   };
 
   return (
-    <div className=" mx-auto p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold text-center mb-4">Bill Header Form</h2>
-      <form
-        onSubmit={handleSubmit}
-        className=" flex items-center justify-start flex-col space-y-4"
-      >
+    <Container>
+      <Title>Bill Header Form</Title>
+      <Form onSubmit={handleSubmit}>
         <div className="w-[80%]">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Name
-          </label>
-          <input
+          <Label htmlFor="name">Name</Label>
+          <Input
             type="text"
             id="name"
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
             required
           />
         </div>
         <div className="w-[80%]">
-          <label
-            htmlFor="address"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Address
-          </label>
-          <input
+          <Label htmlFor="address">Address</Label>
+          <Input
             type="text"
             id="address"
             name="address"
             value={formData.address}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
             required
           />
         </div>
-        <div className="w-[80%] flex gap-x-6">
+        <FlexRow>
           <div className="w-full">
-            <label
-              htmlFor="date"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Date
-            </label>
-            <input
+            <Label htmlFor="date">Date</Label>
+            <Input
               type="date"
               id="date"
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
           </div>
           <div className="w-full">
-            <label
-              htmlFor="gstin"
-              className="block text-sm font-medium text-gray-700"
-            >
-              GSTIN
-            </label>
-            <input
+            <Label htmlFor="gstin">GSTIN</Label>
+            <Input
               type="text"
               id="gstin"
               name="gstin"
               value={formData.gstin}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
           </div>
-        </div>
-        <div className="w-[80%] flex gap-x-6">
+        </FlexRow>
+        <FlexRow>
           <div className="w-full">
-            <label
-              htmlFor="billNo"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Bill No
-            </label>
-            <input
+            <Label htmlFor="billNo">Bill No</Label>
+            <Input
               type="text"
               id="billNo"
               name="billNo"
               value={formData.billNo}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
           </div>
           <div className="w-full">
-            <label
-              htmlFor="city"
-              className="block text-sm font-medium text-gray-700"
-            >
-              City
-            </label>
-            <input
+            <Label htmlFor="city">City</Label>
+            <Input
               type="text"
               id="city"
               name="city"
               value={formData.city}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
           </div>
-        </div>
+        </FlexRow>
         <div className="flex w-[80%] gap-x-6">
           <div className="w-full">
-            <label
-              htmlFor="stateCode"
-              className="block text-sm font-medium text-gray-700"
-            >
-              State Code
-            </label>
-            <input
+            <Label htmlFor="stateCode">State Code</Label>
+            <Input
               type="text"
               id="stateCode"
               name="stateCode"
               value={formData.stateCode}
               onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
               required
             />
           </div>
         </div>
 
         <div className="w-[80%] flex justify-start items-center ">
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700"
-          >
-            Submit
-          </button>
+          <Button type="submit">Submit</Button>
         </div>
-      </form>
-    </div>
+      </Form>
+    </Container>
   );
 };
 
