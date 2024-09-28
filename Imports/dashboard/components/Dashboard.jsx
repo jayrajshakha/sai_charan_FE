@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import LogOutBox from "../../../components/helper/LogOutBox";
-import { BillStore } from "@/data/BillStore";
+// import { BillStore } from "@/data/BillStore";
 // import { useSelector } from "react-redux";
 
 const Dashsboard = () => {
@@ -16,12 +16,12 @@ const Dashsboard = () => {
     <div className={`  ${toggle ? "h-[80vh]" : "h-full"}  p-2`}>
       <header className="flex justify-between items-center py-4 px-6 bg-white rounded-md shadow-md">
         <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-        {/* <button
+        <button
           onClick={() => setToggle(true)}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
           Logout
-        </button> */}
+        </button>
       </header>
       <main className="  mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <section
@@ -59,7 +59,7 @@ const Dashsboard = () => {
           <p className="mt-2 text-gray-600">Some settings content...</p>
         </section>
       </main>
-      {/* {toggle && <LogOutBox setToggle={setToggle} />} */}
+      {toggle && <LogOutBox setToggle={setToggle} />}
     </div>
   );
 };
