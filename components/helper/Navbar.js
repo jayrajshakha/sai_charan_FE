@@ -22,7 +22,9 @@ const Navbar = ({ setShow, show, setProfile, profile, logOut }) => {
                 className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
               >
                 <span className="sr-only">Open user menu</span>
-                <img
+                <Image
+                  height={32}
+                  width={32}
                   className="w-8 h-8 rounded-full"
                   src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   alt="user photo"

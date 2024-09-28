@@ -16,7 +16,6 @@ import { BillStore } from "@/data/BillStore";
 // import PlusIcon from "../../Package/Assets/PlusIcon";
 
 const Bill = () => {
-  // const [bill, setBill] = useState([]);
   const [page, setPage] = useState(1);
   const [offset, setOffset] = useState(0);
   const [totalPages, setTotalPages] = useState(null);
@@ -30,7 +29,6 @@ const Bill = () => {
 
   const { listID } = useParams();
   const { setBill: SetBill, bill } = BillStore();
-  console.log("bill_id", listID);
 
   // const UserData = useSelector((state) => state.UserData.value);
 
