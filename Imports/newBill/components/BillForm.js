@@ -60,6 +60,12 @@ const Button = styled.button`
   }
 `;
 
+const Div = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+`;
+
 const FlexRow = styled.div`
   display: flex;
   gap: 1.5rem;
@@ -124,7 +130,7 @@ const BillForm = () => {
     <Container>
       <Title>Bill Header Form</Title>
       <Form onSubmit={handleSubmit}>
-        <div className="w-[80%]">
+        <Div>
           <Label htmlFor="name">Name</Label>
           <Input
             type="text"
@@ -134,8 +140,8 @@ const BillForm = () => {
             onChange={handleChange}
             required
           />
-        </div>
-        <div className="w-[80%]">
+        </Div>
+        <Div>
           <Label htmlFor="address">Address</Label>
           <Input
             type="text"
@@ -145,7 +151,7 @@ const BillForm = () => {
             onChange={handleChange}
             required
           />
-        </div>
+        </Div>
         <FlexRow>
           <div className="w-full">
             <Label htmlFor="date">Date</Label>
@@ -194,23 +200,21 @@ const BillForm = () => {
             />
           </div>
         </FlexRow>
-        <div className="flex w-[80%] gap-x-6">
-          <div className="w-full">
-            <Label htmlFor="stateCode">State Code</Label>
-            <Input
-              type="text"
-              id="stateCode"
-              name="stateCode"
-              value={formData.stateCode}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
+        <Div className="flex w-[80%] gap-x-6">
+          <Label htmlFor="stateCode">State Code</Label>
+          <Input
+            type="text"
+            id="stateCode"
+            name="stateCode"
+            value={formData.stateCode}
+            onChange={handleChange}
+            required
+          />
+        </Div>
 
-        <div className="w-[80%] flex justify-start items-center ">
+        <Div>
           <Button type="submit">Submit</Button>
-        </div>
+        </Div>
       </Form>
     </Container>
   );

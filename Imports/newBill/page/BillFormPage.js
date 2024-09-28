@@ -4,11 +4,7 @@ import React from "react";
 import BillForm from "../components/BillForm";
 
 const BillFormPage = () => {
-  return (
-    <div>
-      <BillForm />
-    </div>
-  );
+  return <BillForm />;
 };
 
 export default BillFormPage;
