@@ -5,12 +5,12 @@ import Aside from "./Aside";
 import Navbar from "./Navbar";
 
 const AdminDashBoard = ({ children }) => {
-  const [toggle, setToggle] = useState(false);
+  const [loggle, setLoggle] = useState(false);
   const [profile, setProfile] = useState(false);
   const [show, setShow] = useState(false);
 
   const logOut = () => {
-    setToggle(true);
+    setLoggle(true);
   };
 
   return (
@@ -32,7 +32,7 @@ const AdminDashBoard = ({ children }) => {
         } transition-all duration-150`}
       >
         <div className={`  p-1  md:p-4 mt-14 `}>
-          {toggle && <LogOutBox setToggle={setToggle} />} {children}
+          {loggle && <LogOutBox setLoggle={setLoggle} />} {children}
         </div>
       </div>
     </div>
