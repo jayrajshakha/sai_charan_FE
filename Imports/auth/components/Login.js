@@ -27,7 +27,8 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setTimeout(async () => {
-      if (response && response.token) {
+      const response = await UseLogin(userInfo);
+      if (response !== undefined) {
         setCookie(null, "token", response?.token, {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
@@ -37,10 +38,6 @@ const Login = () => {
           autoClose: 1000,
         });
         setLoading(false);
-        setUserInfo({
-          username: "",
-          password: "",
-        });
         router.push("/admin");
       } else {
         toast.error("Invalid Password And Email", {
@@ -48,12 +45,13 @@ const Login = () => {
           autoClose: 1000,
         });
         setLoading(false);
-        setUserInfo({
-          username: "",
-          password: "",
-        });
       }
     }, 500);
+
+    setUserInfo({
+      username: "",
+      password: "",
+    });
   };
 
   return (
@@ -67,7 +65,7 @@ const Login = () => {
             <Label>username</Label>
             <Input
               onChange={handleChange}
-              value={userInfo.username}
+              value={userInfo.email}
               name="username"
               placeholder="UserName"
               type="text"
