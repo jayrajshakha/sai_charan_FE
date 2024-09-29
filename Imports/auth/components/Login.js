@@ -27,7 +27,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setTimeout(async () => {
-      console.log(response, "response");
       if (response && response.token) {
         setCookie(null, "token", response?.token, {
           maxAge: 30 * 24 * 60 * 60,
