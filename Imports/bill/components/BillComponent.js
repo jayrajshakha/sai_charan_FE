@@ -57,7 +57,7 @@ const BillComponent = ({ data }) => {
       head: [["Date", "Truck No", "Place", "Weight", "Rate", "Amount"]],
       body: billData.items.map((item) => [
         item?.date,
-        item?.vahicle_no,
+        item?.vahicle_no.toUpperCase(),
         item?.place,
         item?.tone,
         item?.per_rate,
@@ -87,12 +87,6 @@ const BillComponent = ({ data }) => {
     doc.text(`Bank: ${billData.bankDetails.bankName}`, 10, finalY + 20);
     doc.text(`IFSC: ${billData.bankDetails.ifsc}`, 10, finalY + 25);
     doc.text(`Account No: ${billData.bankDetails.accountNo}`, 10, finalY + 30);
-
-    // Properly Format the Total Amount with Currency
-    const formattedAmount = new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-    }).format(billData.totalAmount);
 
     // Increase spacing for the Total Amount by moving it towards the left
     doc.text(`Total Amount: ${billData?.totalAmount}`, 140, finalY + 20);

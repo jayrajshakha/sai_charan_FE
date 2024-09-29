@@ -7,69 +7,84 @@ import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { BillStore } from "@/data/BillStore";
 
+// Styled Components
 const Container = styled.div`
-  margin: auto;
-  padding: 1rem;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: white; /* Changed to white */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
 `;
 
 const Title = styled.h2`
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 1rem;
+  color: #1f2937; /* Dark Gray */
+  margin-bottom: 1.5rem;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  gap: 1rem; /* Reduced gap */
 `;
 
 const Label = styled.label`
-  display: block;
-  font-size: 0.875rem;
-  font-weight: medium;
-  color: #4a5568; /* gray-700 */
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4b5563; /* Cool Gray */
 `;
 
 const Input = styled.input`
-  margin-top: 0.25rem;
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #d1d5db; /* gray-300 */
-  border-radius: 0.375rem; /* rounded-md */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem; /* Reduced padding */
+  font-size: 0.9rem; /* Slightly smaller font */
+  border: 1.5px solid #d1d5db; /* Light Gray */
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: border 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #2563eb; /* Blue focus */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
 `;
 
 const Button = styled.button`
-  width: 100%;
-  padding: 0.5rem 1rem;
-  background-color: #2563eb; /* blue-600 */
-  color: white;
-  font-weight: 600; /* font-semibold */
-  border-radius: 0.375rem; /* rounded-md */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background-color: #3b82f6; /* Blue */
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: #1d4ed8; /* blue-700 */
+    background-color: #2563eb;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background-color: #1d4ed8;
   }
 `;
 
 const Div = styled.div`
-  width: 80%;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const FlexRow = styled.div`
   display: flex;
-  gap: 1.5rem;
-  width: 80%;
+  justify-content: space-between;
+  gap: 1rem; /* Space between inputs */
+  width: 100%;
 `;
 
 const BillForm = () => {
@@ -80,8 +95,7 @@ const BillForm = () => {
     address: "",
     date: "",
     gstin: "",
-    city: "",
-    stateCode: "",
+    bill_no: "",
   });
 
   const { token } = nookies.get({});
@@ -103,12 +117,10 @@ const BillForm = () => {
     e.preventDefault();
 
     const newBill = {
-      bill_no: bill_no + 1,
+      bill_no: formData?.bill_no,
       name: formData?.name,
       address: formData.address,
       date: formData.date,
-      city: formData.city,
-      state_code: formData.stateCode,
       GSTIN: formData.gstin,
       total_ammount: 0,
       bill_entry: [],
@@ -119,8 +131,19 @@ const BillForm = () => {
 
   return (
     <Container>
-      <Title>Bill Form</Title>
+      <Title>Create New Bill</Title>
       <Form onSubmit={handleSubmit}>
+        <Div>
+          <Label htmlFor="billNo">Bill No</Label>
+          <Input
+            type="number"
+            id="billNo"
+            name="bill_no"
+            value={formData?.bill_no}
+            onChange={handleChange}
+            required
+          />
+        </Div>
         <Div>
           <Label htmlFor="name">Name</Label>
           <Input
@@ -144,7 +167,7 @@ const BillForm = () => {
           />
         </Div>
         <FlexRow>
-          <div className="w-full">
+          <Div style={{ flex: 1 }}>
             <Label htmlFor="date">Date</Label>
             <Input
               type="date"
@@ -154,8 +177,8 @@ const BillForm = () => {
               onChange={handleChange}
               required
             />
-          </div>
-          <div className="w-full">
+          </Div>
+          <Div style={{ flex: 1 }}>
             <Label htmlFor="gstin">GSTIN</Label>
             <Input
               type="text"
@@ -165,33 +188,8 @@ const BillForm = () => {
               onChange={handleChange}
               required
             />
-          </div>
+          </Div>
         </FlexRow>
-        <FlexRow>
-          <div className="w-full">
-            <Label htmlFor="city">City</Label>
-            <Input
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="w-full">
-            <Label htmlFor="stateCode">State Code</Label>
-            <Input
-              type="text"
-              id="stateCode"
-              name="stateCode"
-              value={formData.stateCode}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </FlexRow>
-
         <Div>
           <Button type="submit">Submit</Button>
         </Div>

@@ -50,7 +50,7 @@ const Aside = ({ show, logOut, setShow }) => {
                 `}
             >
               <RecordsIcon />
-              <span className="ms-3">Bill List</span>
+              <span className="ms-3">Bill Book</span>
             </a>
           </li>
           <li
