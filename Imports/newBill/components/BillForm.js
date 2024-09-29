@@ -3,7 +3,6 @@
 import { useState } from "react";
 import UseAddBill from "../api/UseAddBill";
 import nookies from "nookies";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { BillStore } from "@/data/BillStore";
@@ -96,16 +95,7 @@ const BillForm = () => {
   const addBill = async (data) => {
     const response = await UseAddBill(token, data);
     if (response) {
-      toast.success("New Bill added successfully", {
-        theme: "colored",
-        autoClose: 1000,
-      });
       return router.push("/admin/list");
-    } else {
-      toast.error("Failed to add new bill", {
-        theme: "colored",
-        autoClose: 1000,
-      });
     }
   };
 

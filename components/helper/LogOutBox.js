@@ -1,14 +1,12 @@
 import React from "react";
 import { destroyCookie } from "nookies";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 import { CloseModel, WarnIcon } from "../assets";
 
 const LogOutBox = ({ setLoggle }) => {
   const router = useRouter();
 
   const handlerLogout = () => {
-    // toast.success("Logged out", { theme: "colored", autoClose: 1000 });
     destroyCookie(null, "token", {
       path: "/",
     });

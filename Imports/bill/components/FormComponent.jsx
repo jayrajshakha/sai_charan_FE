@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import nookies from "nookies";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
 import UseAddEntry from "../api/UseAddEntry";
 import styled from "styled-components";
 
@@ -20,7 +19,6 @@ const FormComponent = ({ bill_id, toggleModal }) => {
   });
 
   const { token } = nookies.get({});
-  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,17 +30,6 @@ const FormComponent = ({ bill_id, toggleModal }) => {
 
   const addEntry = async (data) => {
     const response = await UseAddEntry(token, data, bill_id);
-    if (response) {
-      toast.success("New Bill added successfully", {
-        theme: "colored",
-        autoClose: 1000,
-      });
-    } else {
-      toast.error("Failed to add new bill", {
-        theme: "colored",
-        autoClose: 1000,
-      });
-    }
   };
 
   const handleSubmit = (e) => {

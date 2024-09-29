@@ -1,8 +1,7 @@
 import ProviderLayout from "../lib/ProviderLayout";
 import StyledComponentsRegistry from "../lib/StyledComponentsRegistry";
 import "./globals.css";
-import "react-toastify/dist/ReactToastify.css";
-import ToastProvider from "../lib/ToastProvider";
+
 import OpeningAnimation from "../lib/helper/OpeningAnimation";
 
 export default function RootLayout({ children }) {
@@ -37,12 +36,10 @@ export default function RootLayout({ children }) {
       </head>
       <body suppressHydrationWarning={true}>
         <StyledComponentsRegistry>
-          <ToastProvider>
-            <ProviderLayout>
-              <OpeningAnimation />
-              {children}
-            </ProviderLayout>
-          </ToastProvider>
+          <ProviderLayout>
+            <OpeningAnimation />
+            {children}
+          </ProviderLayout>
         </StyledComponentsRegistry>
       </body>
     </html>

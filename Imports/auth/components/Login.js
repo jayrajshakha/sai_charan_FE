@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { setCookie } from "nookies";
 import { useState } from "react";
-import { toast } from "react-toastify";
+
 import styled from "styled-components";
 import MainWrapper from "../../../components/helper/Container";
 import { UseLogin } from "../api/UseLogin";
@@ -30,17 +30,9 @@ const Login = () => {
         maxAge: 30 * 24 * 60 * 60,
         path: "/",
       });
-      // toast.success("Login Successfully", {
-      //   theme: "colored",
-      //   autoClose: 1000,
-      // });
       setLoading(false);
       router.push("/admin");
     } else {
-      // toast.error("Invalid Password And Email", {
-      //   theme: "colored",
-      //   autoClose: 1000,
-      // });
       setLoading(false);
     }
 
