@@ -35,6 +35,7 @@ const Login = () => {
     setLoading(true);
     setTimeout(async () => {
       const response = await UseLogin(userInfo);
+      console.log(response, "response");
       if (response && response.token) {
         setCookie(null, "token", response?.token, {
           maxAge: 30 * 24 * 60 * 60,
