@@ -2,10 +2,8 @@ import React from "react";
 import MenuBtn from "./MenuBtn";
 import Logo from "./Logo";
 import Image from "next/image";
-// import { useSelector } from "react-redux";
 
 const Navbar = ({ setShow, show, setProfile, profile, logOut }) => {
-  // const UserData = useSelector((state) => state.UserData.value);
   return (
     <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -65,7 +63,5 @@ const Navbar = ({ setShow, show, setProfile, profile, logOut }) => {
     </nav>
   );
 };
-
-// export default Navbar;
 
 export default React.memo(Navbar);

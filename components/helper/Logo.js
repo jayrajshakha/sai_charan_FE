@@ -12,7 +12,7 @@ const Logo = () => {
         height={30}
       />
       <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-        Logo
+        Sai Charan
       </span>
     </div>
   );

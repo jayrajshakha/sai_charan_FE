@@ -2,8 +2,21 @@
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { CreateIcon, DashboardIcon, LogInIcon, RecordsIcon } from "../assets";
+import { toast } from "react-toastify";
+import { destroyCookie } from "nookies";
 
-const Aside = ({ show, logOut, setShow }) => {
+const Aside = ({ show, setShow }) => {
+  const handlerLogout = () => {
+    toast.success("Logged out", { theme: "colored", autoClose: 1000 });
+    destroyCookie(null, "token", {
+      path: "/",
+    });
+    destroyCookie(null, "role", {
+      path: "/",
+    });
+    router.push("/login");
+  };
+
   const router = useRouter();
   const clientPathName = usePathname();
 
@@ -73,7 +86,7 @@ const Aside = ({ show, logOut, setShow }) => {
             </a>
           </li>
           <li
-            onClick={logOut}
+            onClick={handlerLogout}
             className="cursor-pointer hover:scale-105 transition-all duration-200"
           >
             <a className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
