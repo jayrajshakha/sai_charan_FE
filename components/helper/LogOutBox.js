@@ -9,12 +9,12 @@ const LogOutBox = ({ setLoggle }) => {
 
   const handlerLogout = () => {
     toast.success("Logged out", { theme: "colored", autoClose: 1000 });
-    destroyCookie(null, "token", {
-      path: "/",
-    });
-    destroyCookie(null, "role", {
-      path: "/",
-    });
+    // destroyCookie(null, "token", {
+    //   path: "/",
+    // });
+    // destroyCookie(null, "role", {
+    //   path: "/",
+    // });
     router.push("/login");
   };
   return (
