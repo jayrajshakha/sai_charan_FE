@@ -1,17 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import LogOutBox from "./LogOutBox";
 import Aside from "./Aside";
 import Navbar from "./Navbar";
 
 const AdminDashBoard = ({ children }) => {
-  // const [toggle, setToggle] = useState(false);
   const [profile, setProfile] = useState(false);
   const [show, setShow] = useState(false);
-
-  const logOut = () => {
-    // setToggle(true);
-  };
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#f0f4ff] to-[#d9e7ff]">
@@ -20,10 +14,9 @@ const AdminDashBoard = ({ children }) => {
         show={show}
         setProfile={setProfile}
         profile={profile}
-        // logOut={logOut}
       />
 
-      <Aside show={show} setShow={setShow} logOut={logOut} />
+      <Aside show={show} setShow={setShow} />
 
       <div
         onClick={() => setProfile(false)}
@@ -31,10 +24,7 @@ const AdminDashBoard = ({ children }) => {
           show ? "sm:ml-64" : null
         } transition-all duration-150`}
       >
-        <div className={`  p-1  md:p-4 mt-14 `}>
-          {/* {toggle && <LogOutBox setToggle={setToggle} />}  */}
-          {children}
-        </div>
+        <div className={`  p-1  md:p-4 mt-14 `}>{children}</div>
       </div>
     </div>
   );

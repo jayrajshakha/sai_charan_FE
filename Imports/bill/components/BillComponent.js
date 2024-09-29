@@ -1,9 +1,7 @@
 "use client";
 
-import React from "react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-import { UseNumberToWords } from "../hook/UseNumberToWords";
 import styled from "styled-components";
 
 const BillComponent = ({ data }) => {
@@ -31,7 +29,6 @@ const BillComponent = ({ data }) => {
       accountNo: "261305500144",
     },
     totalAmount: data?.total_ammount,
-    totalInWords: UseNumberToWords(Number(data?.total_ammount)),
   };
 
   const generatePDF = () => {

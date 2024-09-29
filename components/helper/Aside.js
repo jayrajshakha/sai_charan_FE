@@ -14,7 +14,7 @@ const Aside = ({ show, setShow }) => {
     destroyCookie(null, "role", {
       path: "/",
     });
-    router.push("/login");
+    router.push("/");
   };
 
   const router = useRouter();
