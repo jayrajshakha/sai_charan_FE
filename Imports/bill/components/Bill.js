@@ -1,86 +1,105 @@
 "use client";
+import Loading from "@/components/helper/Loading";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const Bill = ({ bill }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (bill) {
+      setLoading(false);
+    }
+  }, [bill]);
+
+  if (loading) {
+    return (
+      <LoaderContainer>
+        <Loading />
+      </LoaderContainer>
+    );
+  }
+
   return (
     <Container>
-      <TableContainer>
-        <Table>
-          <thead>
-            <TableRow>
-              <TableHeader>Sr.</TableHeader>
-              <TableHeader>Date</TableHeader>
-              <TableHeader>Vehicle No</TableHeader>
-              <TableHeader>Place</TableHeader>
-              <TableHeader>Weight</TableHeader>
-              <TableHeader>Per Rate</TableHeader>
-              <TableHeader>Amount</TableHeader>
-            </TableRow>
-          </thead>
-          <tbody>
-            {bill?.bill_entry?.length > 0 &&
-              bill?.bill_entry?.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{item?.date}</TableCell>
-                  <TableCell>{item?.vahicle_no}</TableCell>
-                  <TableCell>{item?.place}</TableCell>
-                  <TableCell>{item?.tone}</TableCell>
-                  <TableCell>{item?.per_rate}</TableCell>
-                  <TableCell>{item?.ammount}</TableCell>
+      {bill?.bill_entry?.length === 0 ? (
+        <NoBillMessage>No Bill Entry, Please Add New Entries</NoBillMessage>
+      ) : (
+        <>
+          <TableContainer>
+            <Table>
+              <thead>
+                <TableRow>
+                  <TableHeader>Sr.</TableHeader>
+                  <TableHeader>Date</TableHeader>
+                  <TableHeader>Vehicle No</TableHeader>
+                  <TableHeader>Place</TableHeader>
+                  <TableHeader>Weight</TableHeader>
+                  <TableHeader>Per Rate</TableHeader>
+                  <TableHeader>Amount</TableHeader>
                 </TableRow>
-              ))}
+              </thead>
+              <tbody>
+                {bill?.bill_entry?.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{item?.date}</TableCell>
+                    <TableCell>{item?.vahicle_no.toUpperCase()}</TableCell>
+                    <TableCell>{item?.place}</TableCell>
+                    <TableCell>{item?.tone}</TableCell>
+                    <TableCell>{item?.per_rate}</TableCell>
+                    <TableCell>{item?.ammount}</TableCell>
+                  </TableRow>
+                ))}
 
-            <TableRow>
-              <TableCell>Total</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>{bill?.total_ammount}</TableCell>
-            </TableRow>
-          </tbody>
-        </Table>
-      </TableContainer>
+                <TableRow>
+                  <TableCell>Total</TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell>{bill?.total_ammount}</TableCell>
+                </TableRow>
+              </tbody>
+            </Table>
+          </TableContainer>
 
-      <DivContainer>
-        {bill?.bill_entry?.length > 0 &&
-          bill?.bill_entry?.map((item, index) => (
-            <DivRow key={index}>
+          {/* Div-based structure for mobile view */}
+          <DivContainer>
+            {bill?.bill_entry?.map((item, index) => (
+              <DivRow key={index}>
+                <DivCell>
+                  <strong>Sr:</strong> {index + 1}
+                </DivCell>
+                <DivCell>
+                  <strong>Date:</strong> {item?.date}
+                </DivCell>
+                <DivCell>
+                  <strong>Vehicle No:</strong> {item?.vahicle_no.toUpperCase()}
+                </DivCell>
+                <DivCell>
+                  <strong>Place:</strong> {item?.place}
+                </DivCell>
+                <DivCell>
+                  <strong>Weight:</strong> {item?.tone}
+                </DivCell>
+                <DivCell>
+                  <strong>Per Rate:</strong> {item?.per_rate}
+                </DivCell>
+                <DivCell>
+                  <strong>Amount:</strong> {item?.ammount}
+                </DivCell>
+              </DivRow>
+            ))}
+
+            <DivRow>
               <DivCell>
-                <strong>Sr:</strong> {index + 1}
-              </DivCell>
-              <DivCell>
-                <strong>Date:</strong> {item?.date}
-              </DivCell>
-              <DivCell>
-                <strong>Vehicle No:</strong> {item?.vahicle_no}
-              </DivCell>
-              <DivCell>
-                <strong>Place:</strong> {item?.place}
-              </DivCell>
-              <DivCell>
-                <strong>Weight:</strong> {item?.tone}
-              </DivCell>
-              <DivCell>
-                <strong>Per Rate:</strong> {item?.per_rate}
-              </DivCell>
-              <DivCell>
-                <strong>Amount:</strong> {item?.ammount}
+                <strong>Total:</strong> {bill?.total_ammount}
               </DivCell>
             </DivRow>
-          ))}
-
-        <DivRow>
-          <DivCell>
-            <strong>Total:</strong> {bill?.total_ammount}
-          </DivCell>
-        </DivRow>
-      </DivContainer>
-
-      {bill?.bill_entry?.length === 0 && (
-        <NoBillMessage>No Bill Entry, Please Add New Entries</NoBillMessage>
+          </DivContainer>
+        </>
       )}
     </Container>
   );
@@ -182,4 +201,16 @@ const NoBillMessage = styled.div`
   color: #ef4444;
   font-size: 1rem;
   text-align: center;
+`;
+
+const LoaderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const Loader = styled.div`
+  font-size: 1.5rem;
+  color: #374151;
 `;

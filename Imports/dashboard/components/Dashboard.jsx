@@ -73,12 +73,12 @@ const Dashsboard = () => {
       </Header>
       <Main>
         <Section onClick={() => router.push("/admin/list")}>
-          <SectionTitle>Bills Data</SectionTitle>
+          <SectionTitle>Bills Book</SectionTitle>
           <SectionText>Some Bills Data content...</SectionText>
         </Section>
 
         <Section onClick={() => router.push("/admin/form")}>
-          <SectionTitle>Form</SectionTitle>
+          <SectionTitle>New Bill</SectionTitle>
           <SectionText>Some Form content...</SectionText>
         </Section>
 
@@ -92,10 +92,10 @@ const Dashsboard = () => {
           <SectionText>Some user activity content...</SectionText>
         </Section>
 
-        <Section>
+        {/* <Section>
           <SectionTitle>Settings</SectionTitle>
           <SectionText>Some settings content...</SectionText>
-        </Section>
+        </Section> */}
       </Main>
     </Container>
   );

@@ -30,6 +30,9 @@ const FormComponent = ({ bill_id, toggleModal }) => {
 
   const addEntry = async (data) => {
     const response = await UseAddEntry(token, data, bill_id);
+    if (response) {
+      toggleModal();
+    }
   };
 
   const handleSubmit = (e) => {
@@ -44,7 +47,6 @@ const FormComponent = ({ bill_id, toggleModal }) => {
       per_rate: "",
       ammount: "",
     });
-    toggleModal();
   };
 
   return (
@@ -56,7 +58,7 @@ const FormComponent = ({ bill_id, toggleModal }) => {
             <Input
               type="text"
               name="vahicle_no"
-              value={formData.vahicle_no}
+              value={formData.vahicle_no.toUpperCase()}
               onChange={handleChange}
               required
             />
@@ -86,7 +88,7 @@ const FormComponent = ({ bill_id, toggleModal }) => {
           <FormField>
             <Label>Tone</Label>
             <Input
-              type="text"
+              type="Number"
               name="tone"
               value={formData.tone}
               onChange={handleChange}
