@@ -45,6 +45,10 @@ const Login = () => {
           autoClose: 1000,
         });
         setLoading(false);
+        setUserInfo({
+          username: "",
+          password: "",
+        });
         router.push("/admin");
       } else {
         toast.error("Invalid Password And Email", {
@@ -52,13 +56,12 @@ const Login = () => {
           autoClose: 1000,
         });
         setLoading(false);
+        setUserInfo({
+          username: "",
+          password: "",
+        });
       }
     }, 500);
-
-    setUserInfo({
-      username: "",
-      password: "",
-    });
   };
 
   return (
@@ -72,7 +75,7 @@ const Login = () => {
             <Label>username</Label>
             <Input
               onChange={handleChange}
-              value={userInfo.email}
+              value={userInfo.username}
               name="username"
               placeholder="UserName"
               type="text"
