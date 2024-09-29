@@ -10,7 +10,7 @@ const BillComponent = ({ data }) => {
       name: "Sai Charan Transport",
       tagline: "Transport Contractor & Commission Agent",
       address: "N. H. No 8, Near Gundlav Chokadi, Valsad (Gujarat-24)",
-      mobile: "Mo: 1234567890",
+      mobile: "Mo: +91 8181959595",
       gstin: "24ABC2349F1RL",
     },
     customer: {
