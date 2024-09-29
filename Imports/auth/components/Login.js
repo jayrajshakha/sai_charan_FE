@@ -10,13 +10,13 @@ import { CloseEyeIcon, Eye } from "../assets";
 
 const Login = () => {
   const router = useRouter();
-  const { token } = nookies.get({});
+  // const { token } = nookies.get({});
 
-  useEffect(() => {
-    if (token) {
-      redirect("/admin");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (token) {
+  //     redirect("/admin");
+  //   }
+  // }, []);
 
   const [userInfo, setUserInfo] = useState({
     username: "",
