@@ -1,22 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import nookies, { setCookie } from "nookies";
-import MainWrapper from "../../../components/helper/Container";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { setCookie } from "nookies";
+import { useState } from "react";
 import { toast } from "react-toastify";
+import styled from "styled-components";
+import MainWrapper from "../../../components/helper/Container";
 import { UseLogin } from "../api/UseLogin";
 import { CloseEyeIcon, Eye } from "../assets";
 
 const Login = () => {
   const router = useRouter();
-  // const { token } = nookies.get({});
-
-  // useEffect(() => {
-  //   if (token) {
-  //     redirect("/admin");
-  //   }
-  // }, []);
 
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -34,7 +27,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setTimeout(async () => {
-      const response = await UseLogin(userInfo);
       console.log(response, "response");
       if (response && response.token) {
         setCookie(null, "token", response?.token, {
