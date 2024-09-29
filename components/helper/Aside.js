@@ -3,7 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { CreateIcon, DashboardIcon, LogInIcon, RecordsIcon } from "../assets";
 
-const Aside = ({ show, logOut }) => {
+const Aside = ({ show, logOut, setShow }) => {
   const router = useRouter();
   const clientPathName = usePathname();
 
@@ -16,7 +16,10 @@ const Aside = ({ show, logOut }) => {
       <div className="h-full px-3 pb-4 overflow-y-auto">
         <ul className="space-y-2 font-medium">
           <li
-            onClick={() => router.push("/admin")}
+            onClick={() => {
+              router.push("/admin");
+              setShow(false);
+            }}
             className="cursor-pointer hover:scale-105 transition-all duration-200"
           >
             <a
@@ -32,7 +35,10 @@ const Aside = ({ show, logOut }) => {
             </a>
           </li>
           <li
-            onClick={() => router.push("/admin/list")}
+            onClick={() => {
+              router.push("/admin/list");
+              setShow(false);
+            }}
             className="cursor-pointer hover:scale-105 transition-all duration-200"
           >
             <a
@@ -47,24 +53,11 @@ const Aside = ({ show, logOut }) => {
               <span className="ms-3">Bill List</span>
             </a>
           </li>
-          {/* <li
-            onClick={() => router.push("/admin/list/new11")}
-            className="cursor-pointer hover:scale-105 transition-all duration-200"
-          >
-            <a
-              className={`flex items-center p-2 rounded-lg text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 
-                ${
-                  ["/admin/list"].includes(clientPathName) &&
-                  "bg-gray-100 dark:bg-gray-700"
-                }
-                `}
-            >
-              <PackageIcon />
-              <span className="ms-3">Recent Bill</span>
-            </a>
-          </li>{" "} */}
           <li
-            onClick={() => router.push("/admin/form")}
+            onClick={() => {
+              router.push("/admin/form");
+              setShow(false);
+            }}
             className="cursor-pointer hover:scale-105 transition-all duration-200"
           >
             <a

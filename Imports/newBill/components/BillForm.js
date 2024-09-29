@@ -129,7 +129,7 @@ const BillForm = () => {
 
   return (
     <Container>
-      <Title>Bill Header Form</Title>
+      <Title>Bill Form</Title>
       <Form onSubmit={handleSubmit}>
         <Div>
           <Label htmlFor="name">Name</Label>

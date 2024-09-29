@@ -23,7 +23,7 @@ const AdminDashBoard = ({ children }) => {
         logOut={logOut}
       />
 
-      <Aside show={show} logOut={logOut} />
+      <Aside show={show} setShow={setShow} logOut={logOut} />
 
       <div
         onClick={() => setProfile(false)}
