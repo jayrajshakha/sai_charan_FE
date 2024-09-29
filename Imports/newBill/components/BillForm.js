@@ -10,7 +10,7 @@ import { BillStore } from "@/data/BillStore";
 // Styled Components
 const Container = styled.div`
   max-width: 500px;
-  margin: 2rem auto;
+  margin: 0 auto;
   padding: 1.5rem;
   background-color: white; /* Changed to white */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
