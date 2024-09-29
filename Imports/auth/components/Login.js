@@ -23,35 +23,39 @@ const Login = () => {
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  const HandlerSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(async () => {
-      const response = await UseLogin(userInfo);
-      if (response !== undefined) {
-        setCookie(null, "token", response?.token, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-        });
-        toast.success("Login Successfully", {
-          theme: "colored",
-          autoClose: 1000,
-        });
-        setLoading(false);
-        router.push("/admin");
-      } else {
-        toast.error("Invalid Password And Email", {
-          theme: "colored",
-          autoClose: 1000,
-        });
-        setLoading(false);
-      }
-    }, 500);
+  const handlerApi = async () => {
+    const response = await UseLogin(userInfo);
+    if (response !== undefined) {
+      setCookie(null, "token", response?.token, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: "/",
+      });
+      // toast.success("Login Successfully", {
+      //   theme: "colored",
+      //   autoClose: 1000,
+      // });
+      setLoading(false);
+      router.push("/admin");
+    } else {
+      // toast.error("Invalid Password And Email", {
+      //   theme: "colored",
+      //   autoClose: 1000,
+      // });
+      setLoading(false);
+    }
 
     setUserInfo({
       username: "",
       password: "",
     });
+  };
+
+  const HandlerSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      handlerApi();
+    }, 3000);
   };
 
   return (

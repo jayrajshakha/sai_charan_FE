@@ -8,7 +8,7 @@ const LogOutBox = ({ setLoggle }) => {
   const router = useRouter();
 
   const handlerLogout = () => {
-    toast.success("Logged out", { theme: "colored", autoClose: 1000 });
+    // toast.success("Logged out", { theme: "colored", autoClose: 1000 });
     destroyCookie(null, "token", {
       path: "/",
     });
