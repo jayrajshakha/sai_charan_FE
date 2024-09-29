@@ -6,12 +6,17 @@ import { useRouter } from "next/navigation";
 import useGetAllBills from "../api/useGetAllBills";
 import { BillStore } from "@/data/BillStore";
 import Loading from "@/components/helper/Loading";
+import { DeleteIcon } from "../assets";
+import { DeletBox } from "../helper";
+import useDeleteBill from "../api/useDeleteBill";
 
 const ListTable = () => {
-  const { bill_list, setBill_list, setBill_no } = BillStore();
+  const { bill_list, setBill_list, deleteBill, setBill_no } = BillStore();
   const { token } = nookies.get({});
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [isDelete, setIsDelete] = useState(false);
+  const [id, setId] = useState(null);
 
   const fetchUserData = async () => {
     try {
@@ -25,9 +30,17 @@ const ListTable = () => {
     }
   };
 
+  const HandlerDelet = (val) => {
+    if (val === "Delete") {
+      useDeleteBill(token, id);
+      deleteBill(id);
+    }
+    setIsDelete(false);
+  };
+
   useEffect(() => {
     fetchUserData();
-  }, []);
+  }, [bill_list?.length]);
 
   if (loading) {
     return (
@@ -54,6 +67,7 @@ const ListTable = () => {
                   <TableHeader>Name</TableHeader>
                   <TableHeader>GSTIN</TableHeader>
                   <TableHeader>Total</TableHeader>
+                  <TableHeader>Action</TableHeader>
                 </TableRow>
               </thead>
               <tbody>
@@ -67,6 +81,14 @@ const ListTable = () => {
                     <TableCell>{item?.name}</TableCell>
                     <TableCell>{item?.GSTIN}</TableCell>
                     <TableCell>{item?.total_ammount}</TableCell>
+                    <TableCell
+                      onClick={(event) => {
+                        event.stopPropagation(), setIsDelete(true);
+                        setId(item?._id);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </TableCell>
                   </TableRow>
                 ))}
               </tbody>
@@ -95,11 +117,21 @@ const ListTable = () => {
                 <DivCell>
                   <strong>Total:</strong> {item?.total_ammount}
                 </DivCell>
+                <DivCell
+                  onClick={(event) => {
+                    event.stopPropagation(), setIsDelete(true);
+                    setId(item?._id);
+                  }}
+                >
+                  <DeleteIcon />
+                </DivCell>
               </DivRow>
             ))}
           </DivContainer>
         </>
       )}
+
+      {isDelete && <DeletBox HandlerDelet={HandlerDelet} />}
     </Container>
   );
 };
