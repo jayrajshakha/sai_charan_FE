@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import nookies from "nookies";
-import { useRouter } from "next/navigation";
 import UseAddEntry from "../api/UseAddEntry";
 import styled from "styled-components";
 
@@ -31,6 +30,15 @@ const FormComponent = ({ bill_id, toggleModal }) => {
   const addEntry = async (data) => {
     const response = await UseAddEntry(token, data, bill_id);
     if (response) {
+      setFormData({
+        id: uuidv4(),
+        date: "",
+        vahicle_no: "",
+        tone: "",
+        place: "",
+        per_rate: "",
+        ammount: "",
+      });
       toggleModal();
     }
   };
@@ -38,15 +46,6 @@ const FormComponent = ({ bill_id, toggleModal }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     addEntry(formData);
-    setFormData({
-      id: uuidv4(),
-      date: "",
-      vahicle_no: "",
-      tone: "",
-      place: "",
-      per_rate: "",
-      ammount: "",
-    });
   };
 
   return (
