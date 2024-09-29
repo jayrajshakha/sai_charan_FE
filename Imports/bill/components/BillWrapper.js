@@ -2,14 +2,34 @@
 
 import BillComponent from "@/Imports/bill/components/BillComponent";
 import { BillStore } from "@/data/BillStore";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import nookies from "nookies";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import useGetOneBill from "../api/useGetOneBill";
 import PlusIcon from "../assets/PlusIcon";
 import Bill from "./Bill";
+import FormComponent from "./FormComponent";
 
 const BillWrapper = () => {
-  const { push } = useRouter();
-  const { bill } = BillStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { token } = nookies.get({});
+  const { listID } = useParams();
+  const { setBill, bill } = BillStore();
+
+  const fetchBillData = async () => {
+    const response = await useGetOneBill(listID, token);
+    setBill(response);
+  };
+
+  useEffect(() => {
+    fetchBillData();
+  }, [isModalOpen]);
+
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
 
   return (
     <>
@@ -19,17 +39,29 @@ const BillWrapper = () => {
       </Container>
 
       <ButtonContainer>
-        <AddButton onClick={() => push("/admin/entry")}>
-          <PlusIcon />
-          Add Entry
-        </AddButton>
+        {bill?.bill_entry?.length < 10 && (
+          <AddButton onClick={toggleModal}>
+            <PlusIcon />
+            Add Entry
+          </AddButton>
+        )}
       </ButtonContainer>
 
       <BillComponentContainer>
         {bill?.bill_entry?.length > 0 && <BillComponent data={bill} />}
       </BillComponentContainer>
 
-      <Bill />
+      <Bill bill={bill} />
+
+      {/* Modal */}
+      {isModalOpen && (
+        <ModalOverlay onClick={toggleModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <CloseButton onClick={toggleModal}>×</CloseButton>
+            <FormComponent bill_id={bill?._id} toggleModal={toggleModal} />
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </>
   );
 };
@@ -39,72 +71,98 @@ export default BillWrapper;
 // Styled Components
 const Container = styled.div`
   background: white;
-  padding: 12px; /* Equivalent to p-3 */
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem; /* Equivalent to mb-4 */
+  margin-bottom: 1rem;
 `;
 
 const BillTitle = styled.h3`
-  font-size: 1.25rem; /* Equivalent to text-xl */
-  font-weight: 700; /* Equivalent to font-bold */
-  color: #374151; /* Equivalent to text-gray-800 */
-
-  // @media (prefers-color-scheme: dark) {
-  //   color: #e2e8f0; /* Equivalent to dark:text-gray-200 */
-  // }
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #374151;
 `;
 
 const BillNumber = styled.h3`
-  font-size: 1.25rem; /* Equivalent to text-xl */
-  margin-right: 1rem; /* Equivalent to mr-4 */
-  font-weight: 700; /* Equivalent to font-bold */
-  color: #374151; /* Equivalent to text-gray-800 */
-
-  // @media (prefers-color-scheme: dark) {
-  //   color: #e2e8f0; /* Equivalent to dark:text-gray-200 */
-  // }
+  font-size: 1.25rem;
+  margin-right: 1rem;
+  font-weight: 700;
+  color: #374151;
 `;
 
 const ButtonContainer = styled.div`
   width: 100%;
   position: fixed;
-  bottom: 12px; /* Equivalent to bottom-3 */
-  right: 25px; /* Equivalent to right-[25px] */
+  bottom: 12px;
+  right: 25px;
   z-index: 40;
   display: flex;
   justify-content: flex-end;
-  margin: 0.75rem 0; /* Equivalent to my-3 */
+  margin: 0.75rem 0;
 `;
 
 const AddButton = styled.button`
-  background-color: #3b82f6; /* Equivalent to bg-blue-700 */
+  background-color: #3b82f6;
   color: white;
   border: none;
-  border-radius: 0.5rem; /* Equivalent to rounded-lg */
-  padding: 0.625rem 0.625rem; /* Equivalent to p-2.5 */
-  font-size: 0.875rem; /* Equivalent to text-sm */
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.625rem;
+  font-size: 0.875rem;
   display: flex;
   align-items: center;
 
   &:hover {
-    background-color: #2563eb; /* Equivalent to hover:bg-blue-800 */
+    background-color: #2563eb;
   }
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 4px rgba(59, 130, 247, 0.3); /* Equivalent to focus:ring-4 focus:ring-blue-300 */
+    box-shadow: 0 0 0 4px rgba(59, 130, 247, 0.3);
   }
 `;
 
 const BillComponentContainer = styled.div`
   width: 100%;
   position: fixed;
-  bottom: 12px; /* Equivalent to bottom-3 */
-  right: 160px; /* Equivalent to right-[160px] */
+  bottom: 12px;
+  right: 160px;
   z-index: 40;
   display: flex;
   justify-content: flex-end;
-  margin: 0.75rem 0; /* Equivalent to my-3 */
+  margin: 0.75rem 0;
+`;
+
+// Modal Styles
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  // padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #374151;
 `;

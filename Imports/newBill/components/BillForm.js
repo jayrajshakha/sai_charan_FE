@@ -6,6 +6,7 @@ import nookies from "nookies";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
+import { BillStore } from "@/data/BillStore";
 
 const Container = styled.div`
   margin: auto;
@@ -73,12 +74,13 @@ const FlexRow = styled.div`
 `;
 
 const BillForm = () => {
+  const { bill_no } = BillStore();
+
   const [formData, setFormData] = useState({
     name: "",
     address: "",
     date: "",
     gstin: "",
-    billNo: "",
     city: "",
     stateCode: "",
   });
@@ -109,10 +111,9 @@ const BillForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form data submitted:", formData);
 
     const newBill = {
-      bill_no: "00001",
+      bill_no: bill_no + 1,
       name: formData?.name,
       address: formData.address,
       date: formData.date,
@@ -178,17 +179,6 @@ const BillForm = () => {
         </FlexRow>
         <FlexRow>
           <div className="w-full">
-            <Label htmlFor="billNo">Bill No</Label>
-            <Input
-              type="text"
-              id="billNo"
-              name="billNo"
-              value={formData.billNo}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="w-full">
             <Label htmlFor="city">City</Label>
             <Input
               type="text"
@@ -199,18 +189,18 @@ const BillForm = () => {
               required
             />
           </div>
+          <div className="w-full">
+            <Label htmlFor="stateCode">State Code</Label>
+            <Input
+              type="text"
+              id="stateCode"
+              name="stateCode"
+              value={formData.stateCode}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </FlexRow>
-        <Div className="flex w-[80%] gap-x-6">
-          <Label htmlFor="stateCode">State Code</Label>
-          <Input
-            type="text"
-            id="stateCode"
-            name="stateCode"
-            value={formData.stateCode}
-            onChange={handleChange}
-            required
-          />
-        </Div>
 
         <Div>
           <Button type="submit">Submit</Button>

@@ -2,45 +2,24 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import nookies from "nookies";
-import { DeletBox, UpdateBox } from "../helper";
-import { DeleteIcon, EditIcon } from "../assets";
 import { useRouter } from "next/navigation";
 import useGetAllBills from "../api/useGetAllBills";
+import { BillStore } from "@/data/BillStore";
 
 const ListTable = () => {
-  const [bill, setBill] = useState([]);
-  const [openDeletBox, setOpenDeletBox] = useState(false);
-  const [id, setId] = useState(null);
-  const [editBox, setEditBox] = useState(false);
-  const [editableUser, setEditableUser] = useState(null);
+  const { bill_list, setBill_list, setBill_no } = BillStore();
   const { token } = nookies.get({});
   const router = useRouter();
 
   const fetchUserData = async () => {
     const response = await useGetAllBills(token);
-    setBill(response?.bills);
+    setBill_list(response);
+    setBill_no(response?.totalBills);
   };
 
   useEffect(() => {
     fetchUserData();
   }, []);
-
-  const handlerEdit = (id) => {
-    openEditBox(true);
-  };
-
-  const openEditBox = (state) => {
-    setEditBox(state);
-  };
-
-  const updatedUserData = (data) => {
-    setEditBox(false);
-  };
-
-  const openPopUpBox = (id) => {
-    setId(id);
-    setOpenDeletBox(true);
-  };
 
   return (
     <Container>
@@ -53,46 +32,50 @@ const ListTable = () => {
               <TableHeader>Name</TableHeader>
               <TableHeader>GSTIN</TableHeader>
               <TableHeader>Total</TableHeader>
-              <TableHeader>Action</TableHeader>
             </TableRow>
           </thead>
           <tbody>
-            {bill?.length > 0 &&
-              bill?.map((item, index) => (
-                <TableRow
-                  key={index}
-                  onClick={() => router.push(`/admin/list/${item?._id}`)}
-                >
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{item?.bill_no}</TableCell>
-                  <TableCell>{item?.name}</TableCell>
-                  <TableCell>{item?.GSTIN}</TableCell>
-                  <TableCell>{item?.total_ammount}</TableCell>
-                  <TableCell>
-                    <ActionContainer>
-                      <ActionSpan onClick={() => handlerEdit(item._id)}>
-                        <EditIcon />
-                      </ActionSpan>
-                      <ActionSpan onClick={() => openPopUpBox(item._id)}>
-                        <DeleteIcon />
-                      </ActionSpan>
-                    </ActionContainer>
-                  </TableCell>
-                </TableRow>
-              ))}
+            {bill_list?.bills?.map((item, index) => (
+              <TableRow
+                key={index}
+                onClick={() => router.push(`/admin/list/${item?._id}`)}
+              >
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{item?.bill_no}</TableCell>
+                <TableCell>{item?.name}</TableCell>
+                <TableCell>{item?.GSTIN}</TableCell>
+                <TableCell>{item?.total_ammount}</TableCell>
+              </TableRow>
+            ))}
           </tbody>
         </Table>
       </TableContainer>
 
-      {openDeletBox && <DeletBox HandlerDelet={HandlerDelet} />}
-
-      {editBox && (
-        <UpdateBox
-          updatedUserData={updatedUserData}
-          editableUser={editableUser}
-          openEditBox={openEditBox}
-        />
-      )}
+      {/* Div-based structure for mobile view */}
+      <DivContainer>
+        {bill_list?.bills?.map((item, index) => (
+          <DivRow
+            key={index}
+            onClick={() => router.push(`/admin/list/${item?._id}`)}
+          >
+            <DivCell>
+              <strong>Sr:</strong> {index + 1}
+            </DivCell>
+            <DivCell>
+              <strong>Bill No:</strong> {item?.bill_no}
+            </DivCell>
+            <DivCell>
+              <strong>Name:</strong> {item?.name}
+            </DivCell>
+            <DivCell>
+              <strong>GSTIN:</strong> {item?.GSTIN}
+            </DivCell>
+            <DivCell>
+              <strong>Total:</strong> {item?.total_ammount}
+            </DivCell>
+          </DivRow>
+        ))}
+      </DivContainer>
     </Container>
   );
 };
@@ -100,6 +83,7 @@ const ListTable = () => {
 export default ListTable;
 
 // Styled Components
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -110,60 +94,75 @@ const Container = styled.div`
 
 const TableContainer = styled.div`
   width: 100%;
-  overflow-x: auto; // Allows horizontal scrolling for small screens
+  display: block;
+
+  @media (max-width: 700px) {
+    display: none;
+  }
 `;
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  color: #6b7280; /* text-gray-500 */
+  color: #6b7280;
 `;
 
 const TableHeader = styled.th`
   padding: 12px;
   text-align: center;
-  background-color: #f9fafb; /* bg-gray-50 */
-  color: #374151; /* text-gray-900 */
+  background-color: #f9fafb;
+  color: #374151;
   text-transform: uppercase;
-  font-size: 0.875rem; /* text-sm */
+  font-size: 0.875rem;
 `;
 
 const TableRow = styled.tr`
-  background-color: white; /* bg-white */
+  background-color: white;
   transition: background-color 0.2s;
   cursor: pointer;
 
   &:hover {
-    background-color: #f1f5f9; /* hover:bg-gray-50 */
+    background-color: #f1f5f9;
   }
 `;
 
 const TableCell = styled.td`
   padding: 12px;
   text-align: center;
-  border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+  border-bottom: 1px solid #e5e7eb;
 `;
 
-const ActionContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
+// Div-based structure for mobile view
+const DivContainer = styled.div`
+  width: 100%;
+  display: none;
+
+  @media (max-width: 700px) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
-const ActionSpan = styled.span`
+const DivRow = styled.div`
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   cursor: pointer;
-  transition: opacity 0.2s;
 
   &:hover {
-    opacity: 0.7;
+    background-color: #f1f5f9;
   }
+`;
 
-  svg {
-    transition: transform 0.2s;
+const DivCell = styled.div`
+  padding: 6px 0;
+  color: #374151;
 
-    &:hover {
-      transform: scale(1.1);
-    }
+  strong {
+    text-transform: uppercase;
+    font-weight: bold;
   }
 `;

@@ -3,7 +3,7 @@ import { UseGetRole } from "./UseGetRole";
 const useAuth = async (token) => {
   if (token) {
     const user = await UseGetRole(token);
-    console.log("user----------------->", user);
+    // console.log("user----------------->", user);
     return {
       user,
     };

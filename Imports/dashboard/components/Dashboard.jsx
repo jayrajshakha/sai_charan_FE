@@ -72,7 +72,7 @@ const Dashsboard = () => {
         <Title>Dashboard</Title>
       </Header>
       <Main>
-        <Section onClick={() => router.push("/admin/bills")}>
+        <Section onClick={() => router.push("/admin/list")}>
           <SectionTitle>Bills Data</SectionTitle>
           <SectionText>Some Bills Data content...</SectionText>
         </Section>

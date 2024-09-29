@@ -1,50 +1,7 @@
 "use client";
-import { BillStore } from "@/data/BillStore";
-import { useParams } from "next/navigation";
-import nookies from "nookies";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-import useGetOneBill from "../api/useGetOneBill";
-import { DeleteIcon, EditIcon } from "../assets";
-import { DeletBox, UpdateBox } from "../helper";
 
-const Bill = () => {
-  const [openDeletBox, setOpenDeletBox] = useState(false);
-  const [editBox, setEditBox] = useState(false);
-  const [editableUser, setEditableUser] = useState(null);
-  const { token } = nookies.get({});
-
-  const { listID } = useParams();
-  const { setBill: SetBill, bill } = BillStore();
-
-  const fetchBillData = async () => {
-    const response = await useGetOneBill(listID, token);
-    console.log("response", response);
-    SetBill(response[0]);
-    setEditBox(false);
-  };
-
-  useEffect(() => {
-    fetchBillData();
-  }, []);
-
-  const handlerEdit = (id) => {
-    openEditBox(true);
-  };
-
-  const openEditBox = (state) => {
-    setEditBox(state);
-  };
-
-  const updatedUserData = (data) => {
-    setEditBox(false);
-  };
-
-  const openPopUpBox = (id) => {
-    setId(id);
-    setOpenDeletBox(true);
-  };
-
+const Bill = ({ bill }) => {
   return (
     <Container>
       <TableContainer>
@@ -53,12 +10,11 @@ const Bill = () => {
             <TableRow>
               <TableHeader>Sr.</TableHeader>
               <TableHeader>Date</TableHeader>
-              <TableHeader>Vahicle No</TableHeader>
+              <TableHeader>Vehicle No</TableHeader>
               <TableHeader>Place</TableHeader>
               <TableHeader>Weight</TableHeader>
               <TableHeader>Per Rate</TableHeader>
-              <TableHeader>Ammount</TableHeader>
-              <TableHeader>Action</TableHeader>
+              <TableHeader>Amount</TableHeader>
             </TableRow>
           </thead>
           <tbody>
@@ -72,34 +28,59 @@ const Bill = () => {
                   <TableCell>{item?.tone}</TableCell>
                   <TableCell>{item?.per_rate}</TableCell>
                   <TableCell>{item?.ammount}</TableCell>
-                  <TableCell>
-                    <ActionContainer>
-                      <ActionSpan onClick={() => handlerEdit(item.id)}>
-                        <EditIcon />
-                      </ActionSpan>
-                      <ActionSpan onClick={() => openPopUpBox(item.id)}>
-                        <DeleteIcon />
-                      </ActionSpan>
-                    </ActionContainer>
-                  </TableCell>
                 </TableRow>
               ))}
+
+            <TableRow>
+              <TableCell>Total</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell>{bill?.total_ammount}</TableCell>
+            </TableRow>
           </tbody>
         </Table>
       </TableContainer>
 
+      <DivContainer>
+        {bill?.bill_entry?.length > 0 &&
+          bill?.bill_entry?.map((item, index) => (
+            <DivRow key={index}>
+              <DivCell>
+                <strong>Sr:</strong> {index + 1}
+              </DivCell>
+              <DivCell>
+                <strong>Date:</strong> {item?.date}
+              </DivCell>
+              <DivCell>
+                <strong>Vehicle No:</strong> {item?.vahicle_no}
+              </DivCell>
+              <DivCell>
+                <strong>Place:</strong> {item?.place}
+              </DivCell>
+              <DivCell>
+                <strong>Weight:</strong> {item?.tone}
+              </DivCell>
+              <DivCell>
+                <strong>Per Rate:</strong> {item?.per_rate}
+              </DivCell>
+              <DivCell>
+                <strong>Amount:</strong> {item?.ammount}
+              </DivCell>
+            </DivRow>
+          ))}
+
+        <DivRow>
+          <DivCell>
+            <strong>Total:</strong> {bill?.total_ammount}
+          </DivCell>
+        </DivRow>
+      </DivContainer>
+
       {bill?.bill_entry?.length === 0 && (
         <NoBillMessage>No Bill Entry, Please Add New Entries</NoBillMessage>
-      )}
-
-      {openDeletBox && <DeletBox HandlerDelet={HandlerDelet} />}
-
-      {editBox && (
-        <UpdateBox
-          updatedUserData={updatedUserData}
-          editableUser={editableUser}
-          openEditBox={openEditBox}
-        />
       )}
     </Container>
   );
@@ -108,81 +89,97 @@ const Bill = () => {
 export default Bill;
 
 // Styled Components
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 `;
 
 const TableContainer = styled.div`
   width: 100%;
-  overflow-x: auto; // Enables horizontal scrolling for smaller screens
+  display: block;
+
+  @media (max-width: 700px) {
+    display: none;
+  }
 `;
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  color: #6b7280; /* text-gray-500 */
+  color: #6b7280;
+
   @media (max-width: 768px) {
-    font-size: 0.875rem; /* Smaller font-size for smaller screens */
+    font-size: 0.875rem;
   }
 `;
 
 const TableHeader = styled.th`
   padding: 12px;
   text-align: center;
-  background-color: #f9fafb; /* bg-gray-50 */
-  color: #374151; /* text-gray-900 */
+  background-color: #f9fafb;
+  color: #374151;
   text-transform: uppercase;
-  font-size: 0.875rem; /* text-sm */
+  font-size: 0.875rem;
 `;
 
 const TableRow = styled.tr`
-  background-color: white; /* bg-white */
+  background-color: white;
   transition: background-color 0.2s;
   cursor: pointer;
 
   &:hover {
-    background-color: #f1f5f9; /* hover:bg-gray-50 */
+    background-color: #f1f5f9;
   }
 `;
 
 const TableCell = styled.td`
   padding: 12px;
   text-align: center;
-  border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+  border-bottom: 1px solid #e5e7eb;
 `;
 
-const ActionContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  justify-content: center;
+// Div-based structure for mobile view
+const DivContainer = styled.div`
+  width: 100%;
+  display: none;
+
+  @media (max-width: 700px) {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
-const ActionSpan = styled.span`
+const DivRow = styled.div`
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   cursor: pointer;
-  transition: opacity 0.2s;
 
   &:hover {
-    opacity: 0.7;
+    background-color: #f1f5f9;
   }
+`;
 
-  svg {
-    transition: transform 0.2s;
+const DivCell = styled.div`
+  padding: 6px 0;
+  color: #374151;
 
-    &:hover {
-      transform: scale(1.1);
-    }
+  strong {
+    text-transform: uppercase;
+    font-weight: bold;
   }
 `;
 
 const NoBillMessage = styled.div`
   margin-top: 20px;
-  color: #ef4444; /* text-red-600 */
+  color: #ef4444;
   font-size: 1rem;
   text-align: center;
 `;

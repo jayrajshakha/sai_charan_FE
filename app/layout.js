@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
         <StyledComponentsRegistry>
           <ToastProvider>
             <ProviderLayout>
-              <OpeningAnimation />
+              {/* <OpeningAnimation /> */}
               {children}
             </ProviderLayout>
           </ToastProvider>

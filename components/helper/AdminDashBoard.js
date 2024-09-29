@@ -7,23 +7,11 @@ import Navbar from "./Navbar";
 const AdminDashBoard = ({ children }) => {
   const [toggle, setToggle] = useState(false);
   const [profile, setProfile] = useState(false);
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const logOut = () => {
     setToggle(true);
   };
-
-  useEffect(() => {
-    if (toggle) {
-      document.body.classList.add("my-body-class");
-    } else {
-      document.body.classList.remove("my-body-class");
-    }
-
-    return () => {
-      document.body.classList.remove("my-body-class");
-    };
-  }, [toggle]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#f0f4ff] to-[#d9e7ff]">

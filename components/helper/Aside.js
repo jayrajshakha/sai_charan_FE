@@ -1,26 +1,11 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-import {
-  CreateIcon,
-  DashboardIcon,
-  LogInIcon,
-  PackageIcon,
-  RecordsIcon,
-  UsersIcon,
-} from "../assets";
-// import { useSelector } from "react-redux";
-import { roleRoutes } from "../../lib/helper/helper";
+import { CreateIcon, DashboardIcon, LogInIcon, RecordsIcon } from "../assets";
 
 const Aside = ({ show, logOut }) => {
   const router = useRouter();
   const clientPathName = usePathname();
-  // const UserData = useSelector((state) => state.UserData.value);
-
-  // const handleClick = () => {
-  //   const route = roleRoutes[UserData?.role] || "/admin";
-  //   router.push(route);
-  // };
 
   return (
     <aside

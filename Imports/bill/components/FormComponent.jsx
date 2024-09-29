@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import UseAddEntry from "../api/UseAddEntry";
 import styled from "styled-components";
 
-const FormComponent = () => {
+const FormComponent = ({ bill_id, toggleModal }) => {
   const [formData, setFormData] = useState({
     id: uuidv4(),
     date: "",
@@ -31,13 +31,12 @@ const FormComponent = () => {
   };
 
   const addEntry = async (data) => {
-    const response = await UseAddEntry(token, data, "66efe8f50b64f8ba0bd80a5e");
+    const response = await UseAddEntry(token, data, bill_id);
     if (response) {
       toast.success("New Bill added successfully", {
         theme: "colored",
         autoClose: 1000,
       });
-      return router.back();
     } else {
       toast.error("Failed to add new bill", {
         theme: "colored",
@@ -58,6 +57,7 @@ const FormComponent = () => {
       per_rate: "",
       ammount: "",
     });
+    toggleModal();
   };
 
   return (

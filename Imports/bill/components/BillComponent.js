@@ -4,10 +4,9 @@ import React from "react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { UseNumberToWords } from "../hook/UseNumberToWords";
+import styled from "styled-components";
 
 const BillComponent = ({ data }) => {
-  console.log("data", data);
-
   const billData = {
     company: {
       name: "Sai Charan Transport",
@@ -34,8 +33,6 @@ const BillComponent = ({ data }) => {
     totalAmount: data?.total_ammount,
     totalInWords: UseNumberToWords(Number(data?.total_ammount)),
   };
-
-  console.log("first", UseNumberToWords(Number("781978")));
 
   const generatePDF = () => {
     const doc = new jsPDF("p", "mm", "a4");
@@ -66,7 +63,7 @@ const BillComponent = ({ data }) => {
         item?.vahicle_no,
         item?.place,
         item?.tone,
-        item?.peer_rate,
+        item?.per_rate,
         item?.ammount,
       ]),
       styles: {
@@ -101,14 +98,10 @@ const BillComponent = ({ data }) => {
     }).format(billData.totalAmount);
 
     // Increase spacing for the Total Amount by moving it towards the left
-    doc.text(
-      `Total Amount: ${formattedAmount}`,
-      140, // Changed from 150 to 140 for better alignment (reduce x-coordinate)
-      finalY + 20
-    );
+    doc.text(`Total Amount: ${billData?.totalAmount}`, 140, finalY + 20);
 
     // Footer (Amount in Words)
-    doc.text(`Amount in Words: ${billData.totalInWords}`, 10, finalY + 40);
+    // doc.text(`Amount in Words: ${189876}`, 10, finalY + 40);
 
     // Signature
     doc.text("For, Sai Charan Transport", 140, finalY + 50); // Move signature closer
@@ -125,15 +118,58 @@ const BillComponent = ({ data }) => {
   };
 
   return (
-    <div className="flex justify-center">
-      <button
-        onClick={generatePDF}
-        className="mt-6 bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700"
-      >
+    <Container>
+      <DownloadButton onClick={generatePDF}>
         Download Bill as PDF
-      </button>
-    </div>
+      </DownloadButton>
+      <DownloadButton2 onClick={generatePDF}>Download Bill</DownloadButton2>
+    </Container>
   );
 };
 
 export default BillComponent;
+
+// Styled Components
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const DownloadButton = styled.button`
+  background-color: #3b82f6;
+  color: white;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  display: none;
+
+  @media (min-width: 400px) {
+    display: block;
+  }
+
+  &:hover {
+    background-color: #1e40af; // hover:bg-blue-700
+  }
+`;
+
+const DownloadButton2 = styled.button`
+  background-color: #3b82f6;
+  color: white;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+
+  @media (min-width: 400px) {
+    display: none;
+  }
+
+  &:hover {
+    background-color: #1e40af; // hover:bg-blue-700
+  }
+`;
